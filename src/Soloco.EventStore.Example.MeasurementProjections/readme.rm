@@ -1,0 +1,4 @@
+﻿- Run EventStore : EventStore.SingleNode.exe --run-projections=all
+- Measure
+  AllStreams vs PerCategory
+  

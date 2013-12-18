@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{032171EC-1C3C-4077-8B39-5FAEB39787D8}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Soloco.EventStore.Test.MeasurementProjections</RootNamespace>
+    <AssemblyName>Soloco.EventStore.Test.MeasurementProjections</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EventStore.ClientAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\EventStore.ClientAPI.build\EventStore.ClientAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\JsonEvent.cs" />
+    <Compile Include="Events\MeasurementPeriodType.cs" />
+    <Compile Include="Events\MeasurementRead.cs" />
+    <Compile Include="Events\MeasurementPeriod.cs" />
+    <Compile Include="Infrastructure\MeasurementConsole.cs" />
+    <Compile Include="Infrastructure\IMeasurementConsole.cs" />
+    <Compile Include="Infrastructure\Projection.cs" />
+    <Compile Include="Infrastructure\ProjectionReader.cs" />
+    <Compile Include="Infrastructure\ProjectionContext.cs" />
+    <Compile Include="Infrastructure\MeasurmentReadSimulator.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="readme.rm" />
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Projections\Tests\Jasmine\MIT.LICENSE" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Content\jasmine\jasmine.css" />
+    <Content Include="Content\jasmine\jasmine_favicon.png" />
+    <Content Include="Projections\References\1Prelude.js" />
+    <Content Include="Projections\References\Modules.js" />
+    <Content Include="Projections\References\ModulesExecuted.js" />
+    <Content Include="Projections\References\Projections.js" />
+    <Content Include="Projections\Tests\MeasurementReadRollingAveragePerWeekday.js" />
+    <Content Include="Projections\Tests\MeasurementReadAveragePerDay.js" />
+    <Content Include="Projections\Tests\MeasurementReadCount.js" />
+    <Content Include="Projections\Tests\Jasmine\jasmine-html.js" />
+    <Content Include="Projections\Tests\Jasmine\jasmine.js" />
+    <EmbeddedResource Include="Projections\MeasurementRead.js" />
+    <EmbeddedResource Include="Projections\MeasurementReadAveragePerDay.js" />
+    <EmbeddedResource Include="Projections\MeasurementReadRollingAveragePerWeekday.js" />
+    <EmbeddedResource Include="Projections\MeasurementReadCount.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
