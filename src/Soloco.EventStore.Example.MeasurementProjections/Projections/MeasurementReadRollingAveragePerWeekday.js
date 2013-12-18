@@ -4,8 +4,15 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
     
     var eventServices = !$eventServices ? { emit: emit } : $eventServices;
 
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    
     var eventStreamId = function (originalStreamId) {
         return 'MeasurementPeriod-' + originalStreamId + '+H';
+    };
+
+    var getWeekDay = function (timestamp) {
+        var date = new Date(timestamp);
+        return days[date.getDay()];
     };
 
     var createEvent = function(timeslot, reading, count) {
@@ -25,7 +32,10 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
             lastTimestamp: timestamp
         };
     };
-
+    var withFourDigits = function(value) {
+        return Math.round(value * 10000) / 10000;
+    };
+    
     var handler = function (previousState, measurementEvent) {
 
         if (measurementEvent.body == null) return previousState;
@@ -35,25 +45,26 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
         var weekday = getWeekDay(timeSlot);
         
         if (!previousState[weekday]) {
-            previousState[weekday] = new { values: [], average: 0 };
+            previousState[weekday] = { values: [], average: 0, total: 0 };
         }
 
         var weekdayState = previousState[weekday];
         weekdayState.values.push(newAverage);
         
-        var numberOfValues = weekday.values.length;
-        var average = weekdayState.average + (newAverage / numberOfValues);
+        var numberOfValues = weekdayState.values.length;
+        weekdayState.total = withFourDigits(weekdayState.total + newAverage);
         
         if (numberOfValues == 8) {
-            average -= weekday.values.pop() / numberOfValues;
+            weekdayState.total -= weekdayState.values.shift();
         }
 
-        weekdayState.average = average;
-        
+        weekdayState.average = withFourDigits(weekdayState.total / numberOfValues);
+
         return previousState;
     };
     
     return {
+        getWeekDay: getWeekDay,
         handleEvent: handler
     };
 };

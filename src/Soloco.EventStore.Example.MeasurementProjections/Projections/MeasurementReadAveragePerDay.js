@@ -12,8 +12,7 @@ var measurementReadAveragPerDay = function measurementReadAveragPerDayConstuctor
 
     var formatTimeSlot = function(timestamp) {
         var date = new Date(timestamp);
-        return 'D' +
-            date.getFullYear().toString() + '/' +
+        return date.getFullYear().toString() + '/' +
             zeroPad(date.getMonth() + 1, 2) + '/' +
             zeroPad(date.getDate(), 2);
     };
@@ -23,7 +22,7 @@ var measurementReadAveragPerDay = function measurementReadAveragPerDayConstuctor
     };
 
     var eventStreamId = function(originalStreamId) {
-        return 'MeasurementAverageDay' + originalStreamId;
+        return 'MeasurementAverageDay-' + originalStreamId;
     };
 
     var createEvent = function(timeslot, reading, count) {

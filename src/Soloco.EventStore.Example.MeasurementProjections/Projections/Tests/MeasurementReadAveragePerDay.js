@@ -1,5 +1,5 @@
 /// <reference path="jasmine/jasmine.js"/>
-/// <reference path="../measurementReadAveragPerDay.js"/>
+/// <reference path="../MeasurementReadAveragePerDay.js"/>
 
 describe("when projecting measurement reads average per day", function () {
     
@@ -29,13 +29,13 @@ describe("when projecting measurement reads average per day", function () {
             });
         });
     
-        it("should contain D plus year month and date", function () {
+        it("should contain year month and date", function () {
 
-            expect("2000-01-01T08:02:39.687Z").toMatchTimeSlot("D2000/01/01");
-            expect("2005-06-24T08:02:39.687Z").toMatchTimeSlot("D2005/06/24");
-            expect("2012-10-10T08:02:39.687Z").toMatchTimeSlot("D2012/10/10");
-            expect("2015-11-12T08:02:39.687Z").toMatchTimeSlot("D2015/11/12");
-            expect("2030-12-18T08:02:39.687Z").toMatchTimeSlot("D2030/12/18");
+            expect("2000-01-01T08:02:39.687Z").toMatchTimeSlot("2000/01/01");
+            expect("2005-06-24T08:02:39.687Z").toMatchTimeSlot("2005/06/24");
+            expect("2012-10-10T08:02:39.687Z").toMatchTimeSlot("2012/10/10");
+            expect("2015-11-12T08:02:39.687Z").toMatchTimeSlot("2015/11/12");
+            expect("2030-12-18T08:02:39.687Z").toMatchTimeSlot("2030/12/18");
 
         });
     });
