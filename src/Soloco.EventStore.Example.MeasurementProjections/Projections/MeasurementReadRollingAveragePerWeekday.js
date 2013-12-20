@@ -7,7 +7,7 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     
     var eventStreamId = function (originalStreamId) {
-        return 'MeasurementPeriod-' + originalStreamId + '+H';
+        return 'MeasurementRollingAveragePerWeekday-' + originalStreamId;
     };
 
     var getWeekDay = function (timestamp) {
@@ -15,25 +15,45 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
         return days[date.getDay()];
     };
 
-    var createEvent = function(timeslot, reading, count) {
+    var withDefault = function (value) { return !value || !value.average ? 0 : value.average; };
+    
+    var createEvent = function (previousState) {
         return {
-            Timeslot: timeslot,
-            Total: reading,
-            Count: count,
-            Average: reading / count
+            Monday: withDefault(previousState.Monday),
+            Tuesday: withDefault(previousState.Tuesday),
+            Wednesday: withDefault(previousState.Wednesday),
+            Thursday: withDefault(previousState.Thursday),
+            Friday: withDefault(previousState.Friday),
+            Saturday: withDefault(previousState.Saturday),
+            Sunday: withDefault(previousState.Sunday),
         };
     };
-
-    var createState = function(reading, count, timestamp) {
-        return {
-            total: reading,                  
-            count: count,
-            average: reading / count,
-            lastTimestamp: timestamp
-        };
-    };
+    
     var withFourDigits = function(value) {
         return Math.round(value * 10000) / 10000;
+    };
+
+    var emitRollingAverageEvent = function (measurementEvent, previousState) {
+
+        var name = eventStreamId(measurementEvent.streamId, previousState.lastTimestamp);
+        var event = createEvent(previousState);
+
+        eventServices.emit(name, "MeasurementRollingAveragePerWeekday", event);
+    };
+    
+    var ensureDefaultState = function(previousState) {
+
+        if (previousState.Monday) return previousState;
+
+        return {
+            Monday: { values: [], average: 0, total: 0 },
+            Tuesday: { values: [], average: 0, total: 0 },
+            Wednesday: { values: [], average: 0, total: 0 },
+            Thursday: { values: [], average: 0, total: 0 },
+            Friday: { values: [], average: 0, total: 0 },
+            Saturday: { values: [], average: 0, total: 0 },
+            Sunday: { values: [], average: 0, total: 0 }
+        };
     };
     
     var handler = function (previousState, measurementEvent) {
@@ -43,12 +63,10 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
         var timeSlot = measurementEvent.body.Timeslot;
         var newAverage = measurementEvent.body.Average;
         var weekday = getWeekDay(timeSlot);
-        
-        if (!previousState[weekday]) {
-            previousState[weekday] = { values: [], average: 0, total: 0 };
-        }
 
-        var weekdayState = previousState[weekday];
+        var state = ensureDefaultState(previousState);
+
+        var weekdayState = state[weekday];
         weekdayState.values.push(newAverage);
         
         var numberOfValues = weekdayState.values.length;
@@ -60,7 +78,9 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
 
         weekdayState.average = withFourDigits(weekdayState.total / numberOfValues);
 
-        return previousState;
+        emitRollingAverageEvent(measurementEvent, state);
+
+        return state;
     };
     
     return {
@@ -69,8 +89,8 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
     };
 };
 
-fromCategory('MeasurementAverageDayMeter')
-  .foreachStream()
-  .when( {
-      MeasurementAverageDay: measurementReadRollingAveragPerWeekDay().handleEvent
-  });
+fromCategory('MeasurementAverageDay-Meter')
+    .foreachStream()
+    .when( {
+        MeasurementAverageDay: measurementReadRollingAveragPerWeekDay().handleEvent
+    });

@@ -43,8 +43,16 @@ var measurementReadAveragPerDay = function measurementReadAveragPerDayConstuctor
         };
     };
 
-    var handleEvent = function (previousState, measurementEvent) {
+    var emitAverageEvent = function (measurementEvent, previousState) {
+        
+        var name = eventStreamId(measurementEvent.streamId, previousState.lastTimestamp);
+        var event = createEvent(formatTimeSlot(previousState.lastTimestamp), previousState.total, previousState.count);
 
+        eventServices.emit(name, "MeasurementAverageDay", event);
+    };
+    
+    var handleEvent = function (previousState, measurementEvent) {
+     
         if (!measurementEvent.body) return previousState;
 
         var timestamp = measurementEvent.body.Timestamp;
@@ -55,11 +63,9 @@ var measurementReadAveragPerDay = function measurementReadAveragPerDayConstuctor
         }
 
         if (isDifferentTimeSlot(timestamp, previousState.lastTimestamp)) {
-            var name = eventStreamId(measurementEvent.streamId, previousState.lastTimestamp);
-            var event = createEvent(formatTimeSlot(previousState.lastTimestamp), previousState.total, previousState.count);
 
-            eventServices.emit(name, "MeasurementAverageDay", event);
-
+            emitAverageEvent(measurementEvent, previousState);
+            
             return createState(reading, 1, timestamp);
         } else {
             return createState(previousState.total + reading, previousState.count + 1, timestamp);

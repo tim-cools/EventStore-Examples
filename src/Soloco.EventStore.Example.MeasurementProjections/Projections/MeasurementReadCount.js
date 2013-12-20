@@ -16,6 +16,7 @@ var measurementReadCount = function () {
     };
 };
 
-fromAll().when({
-    MeasurementRead: measurementReadCount().handleEvent
-});
+fromAll()
+    .when({
+        MeasurementRead: measurementReadCount().handleEvent
+    });
