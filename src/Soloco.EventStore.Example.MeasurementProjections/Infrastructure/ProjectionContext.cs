@@ -42,6 +42,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             EnsureProjection("MeasurementReadAveragePerDay");
             EnsureProjection("MeasurementReadRollingAveragePerWeekday");
             EnsureProjection("MeterToDeviceType");
+            EnsureProjection("DeviceTypeRollingAveragePerWeekHour");    
         }
 
         private IEnumerable<Projection> GetCurrentProjections()

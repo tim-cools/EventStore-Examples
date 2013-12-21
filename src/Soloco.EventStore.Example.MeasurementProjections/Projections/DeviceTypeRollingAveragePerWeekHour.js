@@ -1,32 +1,42 @@
 ﻿/// <reference path="References\1Prelude.js" />
 
-var DeviceTypeRollingAveragePerWeekHour = function measurementReadRollingAveragPerWeekDayConstructor($eventServices) {
+var deviceTypeRollingAveragePerWeekHour = function deviceTypeRollingAveragePerWeekHourConstructor($eventServices) {
     
     var eventServices = !$eventServices ? { emit: emit } : $eventServices;
 
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    
-    var eventStreamId = function (originalStreamId) {
-        return 'MeasurementRollingAveragePerWeekday-' + originalStreamId;
-    };
+    var rollingAverageNumbers = 100;
+    var hoursInADay = 24;
+
+    var eventStreamId = 'DeviceTypeRollingAveragePerWeekHour';
+    var eventName = 'DeviceTypeRollingAveragePerWeekHour';
 
     var getWeekDay = function (timestamp) {
         var date = new Date(timestamp);
         return days[date.getDay()];
     };
-
-    var withDefault = function (value) { return !value || !value.average ? 0 : value.average; };
     
-    var createEvent = function (previousState) {
-        return {
-            Monday: withDefault(previousState.Monday),
-            Tuesday: withDefault(previousState.Tuesday),
-            Wednesday: withDefault(previousState.Wednesday),
-            Thursday: withDefault(previousState.Thursday),
-            Friday: withDefault(previousState.Friday),
-            Saturday: withDefault(previousState.Saturday),
-            Sunday: withDefault(previousState.Sunday),
-        };
+    var defaultHours = function (hourState) {
+        
+        var hours = {};
+        for (var hour = 0; hour < hoursInADay; hour++) {
+            hours[hour] = !hourState[hour] ? hourState[hour].average : 0;
+        }
+        return hours;
+    };
+    
+    var withDefault = function(dayState) {
+         return !dayState || !dayState.average ? defaultHours(dayState) : dayState.average;
+    };
+    
+    var createEvent = function (state) {
+
+        var event = {};
+        for (var dayIndex = 0; dayIndex < days.length; dayIndex++) {
+            var day = days[dayIndex];
+            event[day] = withDefault(state[day]);
+        }
+        return event;
     };
     
     var withFourDigits = function(value) {
@@ -35,54 +45,80 @@ var DeviceTypeRollingAveragePerWeekHour = function measurementReadRollingAveragP
 
     var emitRollingAverageEvent = function (measurementEvent, previousState) {
 
-        var name = eventStreamId(measurementEvent.streamId, previousState.lastTimestamp);
         var event = createEvent(previousState);
 
-        eventServices.emit(name, "MeasurementRollingAveragePerWeekday", event);
+        eventServices.emit(eventStreamId, eventName, event);
     };
     
-    var ensureDefaultState = function(previousState) {
+    var defaultAverageHourState = function () {
+        return { values: [], average: 0, total: 0 };
+    };
+
+    var defaultAverageDayState = function() {
+
+        var hours = {};
+        for (var hour = 0; hour < hoursInADay; hour++) {
+            hours[hour] = defaultAverageHourState();
+        }
+        return hours;
+    };
+
+    var ensureDefaultState = function (previousState) {
 
         if (previousState.Monday) return previousState;
 
-        return {
-            Monday: { values: [], average: 0, total: 0 },
-            Tuesday: { values: [], average: 0, total: 0 },
-            Wednesday: { values: [], average: 0, total: 0 },
-            Thursday: { values: [], average: 0, total: 0 },
-            Friday: { values: [], average: 0, total: 0 },
-            Saturday: { values: [], average: 0, total: 0 },
-            Sunday: { values: [], average: 0, total: 0 }
-        };
+        var state = {};
+        for (var dayIndex = 0; dayIndex < days.length; dayIndex++) {
+            var day = days[dayIndex];
+            state[day] = defaultAverageDayState();
+        }
+        return state;
     };
-    
+
+    var addNewValue = function (weekdayState, newAverage) {
+
+        weekdayState.values.push(newAverage);
+        weekdayState.total = withFourDigits(weekdayState.total + newAverage);
+    };
+
+    var substractRollingValueIfNeceessary = function (weekdayState, numberOfValues) {
+
+        if (numberOfValues > rollingAverageNumbers) {
+            weekdayState.total -= weekdayState.values.shift();
+        }
+    };
+
+    var updateAverage = function (weekdayState, numberOfValues) {
+
+        weekdayState.average = withFourDigits(weekdayState.total / numberOfValues);
+    };
+
+    var updateState = function (state, weekday, newAverage) {
+
+        var weekdayState = state[weekday];
+
+        addNewValue(weekdayState, newAverage);
+
+        var numberOfValues = weekdayState.values.length;
+
+        substractRollingValueIfNeceessary(weekdayState, numberOfValues);
+        updateAverage(weekdayState, numberOfValues);
+    };
+
     var handler = function (previousState, measurementEvent) {
 
         if (measurementEvent.body == null) return previousState;
 
-        var timeSlot = measurementEvent.body.Timeslot;
-        var newAverage = measurementEvent.body.Average;
-        var weekday = getWeekDay(timeSlot);
-
         var state = ensureDefaultState(previousState);
+        var weekday = getWeekDay(measurementEvent.body.Timeslot);
 
-        var weekdayState = state[weekday];
-        weekdayState.values.push(newAverage);
-        
-        var numberOfValues = weekdayState.values.length;
-        weekdayState.total = withFourDigits(weekdayState.total + newAverage);
-        
-        if (numberOfValues == 8) {
-            weekdayState.total -= weekdayState.values.shift();
-        }
-
-        weekdayState.average = withFourDigits(weekdayState.total / numberOfValues);
+        updateState(state, weekday, measurementEvent.body.Average);
 
         emitRollingAverageEvent(measurementEvent, state);
 
         return state;
     };
-    
+
     return {
         getWeekDay: getWeekDay,
         handleEvent: handler
@@ -92,5 +128,5 @@ var DeviceTypeRollingAveragePerWeekHour = function measurementReadRollingAveragP
 fromCategory('DeviceType')
     .foreachStream()
     .when( {
-        MeasurementAverageDay: measurementReadRollingAveragPerWeekDay().handleEvent
+        MeasurementRead: deviceTypeRollingAveragePerWeekHour().handleEvent
     });

@@ -16,20 +16,18 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
         return days[date.getDay()];
     };
 
-    var withDefault = function(value) {
-         return !value || !value.average ? 0 : value.average;
+    var withDefault = function(dayState) {
+         return !dayState || !dayState.average ? 0 : dayState.average;
     };
     
-    var createEvent = function (previousState) {
-        return {
-            Monday: withDefault(previousState.Monday),
-            Tuesday: withDefault(previousState.Tuesday),
-            Wednesday: withDefault(previousState.Wednesday),
-            Thursday: withDefault(previousState.Thursday),
-            Friday: withDefault(previousState.Friday),
-            Saturday: withDefault(previousState.Saturday),
-            Sunday: withDefault(previousState.Sunday),
-        };
+    var createEvent = function (state) {
+
+        var event = {};
+        for (var dayIndex = 0; dayIndex < days.length; dayIndex++) {
+            var day = days[dayIndex];
+            event[day] = withDefault(state[day]);
+        }
+        return event;
     };
     
     var withFourDigits = function(value) {
@@ -43,43 +41,61 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
 
         eventServices.emit(name, "MeasurementRollingAveragePerWeekday", event);
     };
+
+    var defaultAverageState = function () {
+        return { values: [], average: 0, total: 0 };
+    };
     
     var ensureDefaultState = function(previousState) {
 
         if (previousState.Monday) return previousState;
 
-        return {
-            Monday: { values: [], average: 0, total: 0 },
-            Tuesday: { values: [], average: 0, total: 0 },
-            Wednesday: { values: [], average: 0, total: 0 },
-            Thursday: { values: [], average: 0, total: 0 },
-            Friday: { values: [], average: 0, total: 0 },
-            Saturday: { values: [], average: 0, total: 0 },
-            Sunday: { values: [], average: 0, total: 0 }
-        };
+        var state = {};
+        for (var dayIndex = 0; dayIndex < days.length; dayIndex++) {
+            var day = days[dayIndex];
+            state[day] = defaultAverageState();
+        }
+        return state;
+    };
+
+    var addNewValue = function(weekdayState, newAverage) {
+
+        weekdayState.values.push(newAverage);
+        weekdayState.total = withFourDigits(weekdayState.total + newAverage);
+    };
+
+    var substractRollingValueIfNeceessary = function (weekdayState, numberOfValues) {
+
+        if (numberOfValues > rollingAverageNumbers) {
+            weekdayState.total -= weekdayState.values.shift();
+        }
+    };
+
+    var updateAverage = function (weekdayState, numberOfValues) {
+
+        weekdayState.average = withFourDigits(weekdayState.total / numberOfValues);
+    };
+
+    var updateState = function (state, weekday, newAverage) {
+
+        var weekdayState = state[weekday];
+
+        addNewValue(weekdayState, newAverage);
+
+        var numberOfValues = weekdayState.values.length;
+
+        substractRollingValueIfNeceessary(weekdayState, numberOfValues);
+        updateAverage(weekdayState, numberOfValues);
     };
     
     var handler = function (previousState, measurementEvent) {
 
         if (measurementEvent.body == null) return previousState;
 
-        var timeSlot = measurementEvent.body.Timeslot;
-        var newAverage = measurementEvent.body.Average;
-        var weekday = getWeekDay(timeSlot);
-
         var state = ensureDefaultState(previousState);
+        var weekday = getWeekDay(measurementEvent.body.Timeslot);
 
-        var weekdayState = state[weekday];
-        weekdayState.values.push(newAverage);
-        
-        var numberOfValues = weekdayState.values.length;
-        weekdayState.total = withFourDigits(weekdayState.total + newAverage);
-        
-        if (numberOfValues > rollingAverageNumbers) {
-            weekdayState.total -= weekdayState.values.shift();
-        }
-
-        weekdayState.average = withFourDigits(weekdayState.total / numberOfValues);
+        updateState(state, weekday, measurementEvent.body.Average);
 
         emitRollingAverageEvent(measurementEvent, state);
 
