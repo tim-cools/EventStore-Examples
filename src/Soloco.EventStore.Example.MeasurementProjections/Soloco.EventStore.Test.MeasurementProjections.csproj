@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Events\JsonEvent.cs" />
     <Compile Include="Events\MeasurementPeriodType.cs" />
+    <Compile Include="Events\DeviceConfigured.cs" />
     <Compile Include="Events\MeasurementRead.cs" />
     <Compile Include="Events\MeasurementPeriod.cs" />
     <Compile Include="Infrastructure\MeasurementConsole.cs" />
@@ -63,15 +64,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="readme.rm" />
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Projections\Tests\Jasmine\MIT.LICENSE" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Content\jasmine\jasmine.css" />
-    <Content Include="Content\jasmine\jasmine_favicon.png" />
+    <EmbeddedResource Include="Projections\MeterToDeviceType.js" />
     <Content Include="Projections\References\1Prelude.js" />
     <Content Include="Projections\References\Modules.js" />
     <Content Include="Projections\References\ModulesExecuted.js" />

@@ -36,11 +36,12 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             EnableProjection("$by_event_type");
             EnableProjection("$stream_by_category");
             EnableProjection("$streams");
- 	
+
             EnsureProjection("MeasurementRead");
-            //EnsureProjection("MeasurementReadPerHour");
+            EnsureProjection("MeasurementReadCount");
             EnsureProjection("MeasurementReadAveragePerDay");
             EnsureProjection("MeasurementReadRollingAveragePerWeekday");
+            EnsureProjection("MeterToDeviceType");
         }
 
         private IEnumerable<Projection> GetCurrentProjections()

@@ -45,7 +45,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
                     break;
                 case "MeasurementPeriod":
                     {
-                        var @event = JsonEvent.Parse<MeasurementPeriod>(recordedEvent);
+                        var @event = JsonEventExtensions.ParseJson<MeasurementPeriod>(recordedEvent);
 
                         if (@event.Type == MeasurementPeriodType.Hour)
                         {

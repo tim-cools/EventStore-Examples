@@ -9,7 +9,7 @@ Run EventStore
 Ensure to use parameter --run-projections=all
 
 ```
-EventStore.SingleNode.exe --run-projections=all
+EventStore.SingleNode.exe --run-projections=all --mem-db
 ```
 
 Projections

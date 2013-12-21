@@ -1,12 +1,14 @@
 ﻿/// <reference path="References\1Prelude.js" />
 
-fromAll().when({
-    'MeasurementRead': function (s, e) {
+fromAll()
+    .when({
 
-        if (e.body == null) return s;
+        MeasurementRead: function (s, e) {
 
-        linkTo('MeasurementRead', e);
+            if (e.body == null) return s;
 
-        return s;
-    }
-});
+            linkTo('MeasurementRead', e);
+
+            return s;
+        }
+    });

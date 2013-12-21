@@ -1,10 +1,9 @@
 ﻿/// <reference path="References\1Prelude.js" />
 
-var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAveragPerWeekDayConstructor($eventServices) {
+var DeviceTypeRollingAveragePerWeekHour = function measurementReadRollingAveragPerWeekDayConstructor($eventServices) {
     
     var eventServices = !$eventServices ? { emit: emit } : $eventServices;
 
-    var rollingAverageNumbers = 7;
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     
     var eventStreamId = function (originalStreamId) {
@@ -16,9 +15,7 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
         return days[date.getDay()];
     };
 
-    var withDefault = function(value) {
-         return !value || !value.average ? 0 : value.average;
-    };
+    var withDefault = function (value) { return !value || !value.average ? 0 : value.average; };
     
     var createEvent = function (previousState) {
         return {
@@ -75,7 +72,7 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
         var numberOfValues = weekdayState.values.length;
         weekdayState.total = withFourDigits(weekdayState.total + newAverage);
         
-        if (numberOfValues > rollingAverageNumbers) {
+        if (numberOfValues == 8) {
             weekdayState.total -= weekdayState.values.shift();
         }
 
@@ -92,7 +89,7 @@ var measurementReadRollingAveragPerWeekDay = function measurementReadRollingAver
     };
 };
 
-fromCategory('MeasurementAverageDay-Meter')
+fromCategory('DeviceType')
     .foreachStream()
     .when( {
         MeasurementAverageDay: measurementReadRollingAveragPerWeekDay().handleEvent

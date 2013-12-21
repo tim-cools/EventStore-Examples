@@ -43,15 +43,17 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             var random = new Random();
             var streamName = "Meter-" + meter;
 
+            await AppendConfiguredEvent(streamName);
+             
             var start = DateTime.Now;
             var last = start;
             var i = 1;
             while(_running)
             {
-                var @event = new MeasurementRead(start, random.Next(150, 300) / 10m);
-                var jsonEvent = JsonEvent.Create(@event);
+                var @event = new MeasurementRead(start, random.Next(150, 300) / 10m)
+                    .AsJson();
 
-                await _connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, new[] { jsonEvent });
+                await _connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, new[] { @event });
 
                 start = start.AddMinutes(60);
 
@@ -60,10 +62,18 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
                     _console.Red(streamName + ": 100 events duration ms " + (DateTime.Now - last).TotalMilliseconds);
                     last = DateTime.Now;
                 }
-                Thread.Sleep(50);
+                Thread.Sleep(5000);
 
                 i++;
             }
+        }
+
+        private Task<WriteResult> AppendConfiguredEvent(string streamName)
+        {
+            var @event = new DeviceConfigured("Fridge", streamName)
+                .AsJson();
+
+            return _connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, new[] { @event });
         }
     }
 }
