@@ -1,22 +1,28 @@
 ﻿/// <reference path="References\1Prelude.js" />
 
-var measurementReadCount = function () {
-    
-    var handleEvent = function (s, e) {
+var eventCounter = function () {
 
-        if (e.body == null) return s;
+    var init = function () {
+        return { count: 0 };
+    };
+     
+    var countEvents = function (state, eventEnvelope) {
 
-        s.count = s.count == null ? 1 : s.count + 1;
+        state.count += 1;
 
-        return s;
+        return state;
     };
 
     return {
-        handleEvent: handleEvent
+        init: init,
+        increase: countEvents
     };
 };
 
+var counter = eventCounter();
+
 fromAll()
     .when({
-        MeasurementRead: measurementReadCount().handleEvent
+        $init: counter.init,
+        MeasurementRead: counter.increase
     });
