@@ -57,16 +57,20 @@
     <Compile Include="Infrastructure\MeasurementConsole.cs" />
     <Compile Include="Infrastructure\IMeasurementConsole.cs" />
     <Compile Include="Infrastructure\Projection.cs" />
+    <Compile Include="Infrastructure\QueryReader.cs" />
     <Compile Include="Infrastructure\ProjectionReader.cs" />
     <Compile Include="Infrastructure\ProjectionContext.cs" />
     <Compile Include="Infrastructure\MeasurmentReadSimulator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Infrastructure\EventStoreCredentials.cs" />
+    <Compile Include="Queries\MeasurementReadCounter.cs" />
+    <Compile Include="Queries\MeasurementReadCounterQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Projections\Tests\Jasmine\MIT.LICENSE" />
+    <None Include="Projections\References\Jasmine\MIT.LICENSE" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -78,13 +82,13 @@
     <Content Include="Projections\References\Projections.js" />
     <Content Include="Projections\Tests\MeasurementReadRollingAveragePerWeekday.js" />
     <Content Include="Projections\Tests\MeasurementReadAveragePerDay.js" />
-    <Content Include="Projections\Tests\MeasurementReadCount.js" />
-    <Content Include="Projections\Tests\Jasmine\jasmine-html.js" />
-    <Content Include="Projections\Tests\Jasmine\jasmine.js" />
+    <Content Include="Projections\Tests\MeasurementReadCounter.js" />
+    <Content Include="Projections\References\Jasmine\jasmine-html.js" />
+    <Content Include="Projections\References\Jasmine\jasmine.js" />
     <EmbeddedResource Include="Projections\MeasurementRead.js" />
     <EmbeddedResource Include="Projections\MeasurementReadAveragePerDay.js" />
     <EmbeddedResource Include="Projections\MeasurementReadRollingAveragePerWeekday.js" />
-    <EmbeddedResource Include="Projections\MeasurementReadCount.js" />
+    <EmbeddedResource Include="Projections\MeasurementReadCounter.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

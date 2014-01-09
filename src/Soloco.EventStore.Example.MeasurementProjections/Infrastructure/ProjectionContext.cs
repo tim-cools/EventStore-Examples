@@ -4,14 +4,11 @@ using System.IO;
 using System.Linq;
 
 using EventStore.ClientAPI;
-using EventStore.ClientAPI.SystemData;
 
 namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 {
     public class ProjectionContext
     {
-        private readonly UserCredentials _credentials = new UserCredentials("admin", "changeit");
-
         private readonly ProjectionsManager _projections;
         private readonly MeasurementConsole _console;
 
@@ -32,22 +29,22 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 
             _currentProjections = GetCurrentProjections();
 
-            EnableProjection("$by_category");
-            EnableProjection("$by_event_type");
-            EnableProjection("$stream_by_category");
-            EnableProjection("$streams");
+            //EnableProjection("$by_category");
+            //EnableProjection("$by_event_type");
+            //EnableProjection("$stream_by_category");
+            //EnableProjection("$streams");
 
-            EnsureProjection("MeasurementRead");
-            EnsureProjection("MeasurementReadCount");
-            EnsureProjection("MeasurementReadAveragePerDay");
-            EnsureProjection("MeasurementReadRollingAveragePerWeekday");
-            EnsureProjection("MeterToDeviceType");
-            EnsureProjection("DeviceTypeRollingAveragePerWeekHour");    
+            //EnsureProjection("MeasurementRead");
+            EnsureProjection("MeasurementReadCounter");
+            //EnsureProjection("MeasurementReadAveragePerDay");
+            //EnsureProjection("MeasurementReadRollingAveragePerWeekday");
+            //EnsureProjection("MeterToDeviceType");
+            //EnsureProjection("DeviceTypeRollingAveragePerWeekHour");    
         }
 
         private IEnumerable<Projection> GetCurrentProjections()
         {
-            var all = _projections.ListAll(_credentials);
+            var all = _projections.ListAll(EventStoreCredentials.Default);
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(all);
             var projections = new List<Projection>();
 
@@ -66,8 +63,8 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
         private void EnableProjection(string name)
         {
             if (_currentProjections.Any(p => p.Name == name && p.Status != "Stopped")) return;
-            
-            _projections.Enable(name, _credentials);
+
+            _projections.Enable(name, EventStoreCredentials.Default);
         }
 
         public void EnsureProjection(string name)
@@ -87,18 +84,18 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
         {
             _console.Log("Add projection: " + name);
 
-            _projections.CreateContinuous(name, expectedQuery, _credentials);
+            _projections.CreateContinuous(name, expectedQuery, EventStoreCredentials.Default);
         }
 
         private void UpdateProjection(string name, string expectedQuery)
         {
             _console.Log("Update existing projection: " + name);
 
-            var currentQuery = _projections.GetQuery(name, _credentials);
+            var currentQuery = _projections.GetQuery(name, EventStoreCredentials.Default);
 
             if (expectedQuery != currentQuery)
             {
-                _projections.UpdateQuery(name, expectedQuery, _credentials);
+                _projections.UpdateQuery(name, expectedQuery, EventStoreCredentials.Default);
             }
         }
 

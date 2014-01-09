@@ -9,8 +9,6 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 {
     internal class ProjectionReader
     {
-        private readonly UserCredentials _credentials = new UserCredentials("admin", "changeit");
-
         private readonly IEventStoreConnection _connection;
         private readonly IMeasurementConsole _console;
 
@@ -30,7 +28,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 
         private void StartAsync()
         {
-            _connection.SubscribeToAll(true, Appeared, Dropped, _credentials);
+            _connection.SubscribeToAll(true, Appeared, Dropped, EventStoreCredentials.Default);
         }
 
         private void Appeared(EventStoreSubscription subscription, ResolvedEvent data)
@@ -38,14 +36,12 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             var recordedEvent = data.Event;
             switch (recordedEvent.EventType)
             {
-                case "$stream-created":
-                    _console.Green("$stream-created: " + recordedEvent.EventStreamId);
-                    break;
                 case "MeasurementRead":
+                    _console.Green("MeasurementRead: " + recordedEvent.ParseJson<MeasurementRead>());
                     break;
                 case "MeasurementPeriod":
                     {
-                        var @event = JsonEventExtensions.ParseJson<MeasurementPeriod>(recordedEvent);
+                        var @event = recordedEvent.ParseJson<MeasurementPeriod>();
 
                         if (@event.Type == MeasurementPeriodType.Hour)
                         {
@@ -68,7 +64,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 
         private void Dropped(EventStoreSubscription subscription, SubscriptionDropReason subscriptionDropReason, Exception exception)
         {
-            Console.WriteLine("Subscription {0}dropped: {1}{2}{3}", subscription.StreamId, subscriptionDropReason, Environment.NewLine, exception);
+            Console.WriteLine("Subscription {0} dropped: {1} (No recovery implemented currently){2}{3}", subscription.StreamId, subscriptionDropReason, Environment.NewLine, exception);
         }
     }
 }

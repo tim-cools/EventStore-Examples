@@ -1,5 +1,5 @@
-/// <reference path="jasmine/jasmine.js"/>
-/// <reference path="../MeasurementReadCount.js"/>
+/// <reference path="../References/jasmine/jasmine.js"/>
+/// <reference path="../MeasurementReadCounter.js"/>
 
 describe("when counting measurement reads", function () {
     
@@ -11,7 +11,7 @@ describe("when counting measurement reads", function () {
         counter = eventCounter();
     });
 
-    it("should initialize new state on first event", function () {
+    it("should initialize new state with count 0", function () {
 
         var initState = counter.init();
 

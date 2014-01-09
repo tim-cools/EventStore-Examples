@@ -21,6 +21,10 @@ var eventCounter = function () {
 
 var counter = eventCounter();
 
+options({
+    producesResults: true
+});
+
 fromAll()
     .when({
         $init: counter.init,

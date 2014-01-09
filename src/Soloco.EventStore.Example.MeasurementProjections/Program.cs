@@ -26,6 +26,9 @@ namespace Soloco.EventStore.Test.MeasurementProjections
             var simulator = new MeasurementReadSimulator(connection, console);
             simulator.Start();
 
+            var queryReader = new QueryReader(connection);
+            queryReader.Start();
+
             Console.ReadLine();
 
             simulator.Stop();

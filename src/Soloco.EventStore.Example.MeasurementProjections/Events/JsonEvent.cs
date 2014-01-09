@@ -28,5 +28,14 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Events
 
             return JsonConvert.DeserializeObject<T>(value);
         }
+
+        public static T ParseJson<T>(this ResolvedEvent data)
+        {
+            var value = Encoding.UTF8.GetString(data.Event.Data);
+            
+            //Console.WriteLine("RAW Event ({0}):{1}", data.OriginalEvent.EventType, value);
+
+            return JsonConvert.DeserializeObject<T>(value);
+        }
     }
 }
