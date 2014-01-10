@@ -8,13 +8,13 @@ using Soloco.EventStore.Test.MeasurementProjections.Events;
 
 namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 {
-    internal class MeasurementReadSimulator
+    public class DeviceSimulator
     {
         private readonly IEventStoreConnection _connection;
-        private readonly MeasurementConsole _console;
+        private readonly ColorConsole _console;
         private volatile bool _running;
 
-        public MeasurementReadSimulator(IEventStoreConnection connection, MeasurementConsole console)
+        public DeviceSimulator(IEventStoreConnection connection, ColorConsole console)
         {
             if (connection == null) throw new ArgumentNullException("connection");
 
@@ -41,7 +41,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
         private async void StartAsync(int meter)
         {
             var random = new Random();
-            var streamName = "Meter-" + meter;
+            var streamName = "Device-" + meter;
 
             await AppendConfiguredEvent(streamName);
              

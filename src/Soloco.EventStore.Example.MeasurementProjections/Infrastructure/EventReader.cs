@@ -1,18 +1,16 @@
 using System;
-using System.Threading.Tasks;
 
 using EventStore.ClientAPI;
-using EventStore.ClientAPI.SystemData;
 using Soloco.EventStore.Test.MeasurementProjections.Events;
 
 namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 {
-    internal class ProjectionReader
+    public class EventReader
     {
         private readonly IEventStoreConnection _connection;
-        private readonly IMeasurementConsole _console;
+        private readonly IColorConsole _console;
 
-        public ProjectionReader(IEventStoreConnection connection, IMeasurementConsole console)
+        public EventReader(IEventStoreConnection connection, IColorConsole console)
         {
             if (connection == null) throw new ArgumentNullException("connection");
             if (console == null) throw new ArgumentNullException("console");
@@ -21,23 +19,20 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             _console = console;
         }
 
-        public void Start()
-        {
-            Task.Run(() => StartAsync());
-        }
-
-        private void StartAsync()
+        public void StartReading()
         {
             _connection.SubscribeToAll(true, Appeared, Dropped, EventStoreCredentials.Default);
         }
 
         private void Appeared(EventStoreSubscription subscription, ResolvedEvent data)
         {
+            // if (data.Link != null) return;
+
             var recordedEvent = data.Event;
             switch (recordedEvent.EventType)
             {
                 case "MeasurementRead":
-                    _console.Green("MeasurementRead: " + recordedEvent.ParseJson<MeasurementRead>());
+                    _console.Green("MeasurementRead: {0} (from: {1})", recordedEvent.ParseJson<MeasurementRead>(), recordedEvent.EventStreamId);
                     break;
                 case "MeasurementPeriod":
                     {
@@ -64,7 +59,10 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 
         private void Dropped(EventStoreSubscription subscription, SubscriptionDropReason subscriptionDropReason, Exception exception)
         {
-            Console.WriteLine("Subscription {0} dropped: {1} (No recovery implemented currently){2}{3}", subscription.StreamId, subscriptionDropReason, Environment.NewLine, exception);
+            var message = string.Format("Subscription {0} dropped: {1} (Recovery currently not implemented){2}{3}",
+                subscription.StreamId, subscriptionDropReason, Environment.NewLine, exception);
+
+            _console.Red(message);
         }
     }
 }

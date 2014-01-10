@@ -17,7 +17,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Events
             var data = Encoding.UTF8.GetBytes(json);
             var eventName = value.GetType().Name;
 
-            return new EventData(Guid.NewGuid(), eventName, true, data, new byte[] {});
+            return new EventData(Guid.NewGuid(), eventName, true, data, new byte[] { });
         }
 
         public static T ParseJson<T>(this RecordedEvent data)
@@ -25,6 +25,13 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Events
             if (data == null) throw new ArgumentNullException("data");
 
             var value = Encoding.UTF8.GetString(data.Data);
+
+            return JsonConvert.DeserializeObject<T>(value);
+        }
+
+        public static T ParseJson<T>(this string value)
+        {
+            if (value == null) throw new ArgumentNullException("value");
 
             return JsonConvert.DeserializeObject<T>(value);
         }

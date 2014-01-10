@@ -1,45 +1,29 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.Common.Log;
+using Soloco.EventStore.Test.MeasurementProjections.Events;
 
 namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 {
-    public class ProjectionContext
+    public class ProjectionContext : IProjectionContext
     {
         private readonly ProjectionsManager _projections;
-        private readonly MeasurementConsole _console;
+        private readonly ColorConsole _console;
 
-        private IEnumerable<Projection> _currentProjections;
+        private readonly IEnumerable<Projection> _currentProjections;
 
-        public ProjectionContext(ProjectionsManager projections, MeasurementConsole console)
+        public ProjectionContext(ColorConsole console)
         {
-            if (projections == null) throw new ArgumentNullException("projections");
             if (console == null) throw new ArgumentNullException("console");
 
-            _projections = projections;
-            _console = console;            
-        }
+            var logger = new ConsoleLogger();
+            _projections = new ProjectionsManager(logger, IPEndPointFactory.DefaultHttp());
 
-        public void Initialize()
-        {
-            if (_currentProjections != null) throw new InvalidOperationException("Context already initialized.");
-
-            _currentProjections = GetCurrentProjections();
-
-            //EnableProjection("$by_category");
-            //EnableProjection("$by_event_type");
-            //EnableProjection("$stream_by_category");
-            //EnableProjection("$streams");
-
-            //EnsureProjection("MeasurementRead");
-            EnsureProjection("MeasurementReadCounter");
-            //EnsureProjection("MeasurementReadAveragePerDay");
-            //EnsureProjection("MeasurementReadRollingAveragePerWeekday");
-            //EnsureProjection("MeterToDeviceType");
-            //EnsureProjection("DeviceTypeRollingAveragePerWeekHour");    
+            _console = console;
+            _currentProjections = GetCurrentProjections();         
         }
 
         private IEnumerable<Projection> GetCurrentProjections()
@@ -60,23 +44,22 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             return projections;
         }
 
-        private void EnableProjection(string name)
+        public void EnableProjection(string name)
         {
             if (_currentProjections.Any(p => p.Name == name && p.Status != "Stopped")) return;
 
             _projections.Enable(name, EventStoreCredentials.Default);
         }
 
-        public void EnsureProjection(string name)
+        public void EnsureProjection(string name, string source)
         {
-            var expectedQuery = ReadQueryFromEmbeddeResource(name);
             if (_currentProjections.Any(n => n.Name == name))
             {
-                UpdateProjection(name, expectedQuery);
+                UpdateProjection(name, source);
             }
             else
             {
-                AddProjection(name, expectedQuery);
+                AddProjection(name, source);
             }
         }
 
@@ -99,15 +82,10 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             }
         }
 
-        private static string ReadQueryFromEmbeddeResource(string name)
+        public T GetState<T>(string projectinoName)
         {
-            var fullName = string.Format("{0}.Projections.{1}.js", typeof(Program).Namespace, name);
-            var assembly = typeof(ProjectionContext).Assembly;
-            using (var stream = assembly.GetManifestResourceStream(fullName))
-            using (var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+            var state = _projections.GetState(projectinoName);
+            return state.ParseJson<T>();
         }
     }
 }
