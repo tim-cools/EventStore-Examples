@@ -5,13 +5,13 @@ using Soloco.EventStore.Test.MeasurementProjections.Infrastructure;
 
 namespace Soloco.EventStore.Test.MeasurementProjections.Queries
 {
-    public class MeasurementReadCounterQuery
+    public class MeasurementReadByDeviceTypePartitionerQuery
     {
         private readonly IConsole _console;
         private readonly IEventStoreConnection _connection;
         private readonly IProjectionContext _projectionContext;
 
-        public MeasurementReadCounterQuery(IEventStoreConnection connection, IProjectionContext projectionContext, IConsole console)
+        public MeasurementReadByDeviceTypePartitionerQuery(IEventStoreConnection connection, IProjectionContext projectionContext, IConsole console)
         {
             if (connection == null) throw new ArgumentNullException("connection");
             if (console == null) throw new ArgumentNullException("console");
@@ -23,13 +23,13 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Queries
 
         public MeasurementReadCounter GetValue()
         {
-            return _projectionContext.GetState<MeasurementReadCounter>("MeasurementReadCounter");
+            return _projectionContext.GetState<MeasurementReadCounter>("MeasurementReadByDeviceTypePartitioner");
         }
 
         public void SubscribeValueChange(Action<MeasurementReadCounter> valueChanged)
         {
             _connection.SubscribeToStream(
-                "$projections-MeasurementReadCounter-result", 
+                "$projections-MeasurementReadByDeviceTypePartitioner-result", 
                 false, 
                 (subscription, resolvedEvent) => ValueChanged(subscription, resolvedEvent, valueChanged), 
                 Dropped, 

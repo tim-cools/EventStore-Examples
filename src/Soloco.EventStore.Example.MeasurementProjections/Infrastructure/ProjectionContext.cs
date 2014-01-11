@@ -11,11 +11,11 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
     public class ProjectionContext : IProjectionContext
     {
         private readonly ProjectionsManager _projections;
-        private readonly IColorConsole _console;
+        private readonly IConsole _console;
 
         private readonly IEnumerable<Projection> _currentProjections;
 
-        public ProjectionContext(IColorConsole console)
+        public ProjectionContext(IConsole console)
         {
             if (console == null) throw new ArgumentNullException("console");
 

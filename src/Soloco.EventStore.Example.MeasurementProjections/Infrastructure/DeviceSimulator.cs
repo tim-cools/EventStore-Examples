@@ -13,11 +13,11 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
         private static readonly Random Random = new Random();
 
         private readonly IEventStoreConnection _connection;
-        private readonly IColorConsole _console;
+        private readonly IConsole _console;
 
         private volatile bool _running;
 
-        public DeviceSimulator(IEventStoreConnection connection, IColorConsole console)
+        public DeviceSimulator(IEventStoreConnection connection, IConsole console)
         {
             if (connection == null) throw new ArgumentNullException("connection");
 

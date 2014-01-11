@@ -66,18 +66,21 @@
     <Compile Include="Events\MeasurementPeriod.cs" />
     <Compile Include="Infrastructure\EventStoreConnectionFactory.cs" />
     <Compile Include="Infrastructure\IProjectionContext.cs" />
-    <Compile Include="Infrastructure\ColorConsole.cs" />
-    <Compile Include="Infrastructure\IColorConsole.cs" />
+    <Compile Include="Infrastructure\Console.cs" />
+    <Compile Include="Infrastructure\IConsole.cs" />
     <Compile Include="KernelFactory.cs" />
     <Compile Include="Infrastructure\Projection.cs" />
     <Compile Include="Infrastructure\EventReader.cs" />
     <Compile Include="Infrastructure\ProjectionContext.cs" />
     <Compile Include="Infrastructure\DeviceSimulator.cs" />
     <Compile Include="Infrastructure\IPEndPointFactory.cs" />
+    <Compile Include="Projections\MeasurementReadCounterProjection - Copy.cs" />
     <Compile Include="Projections\ProjectionSources.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\EventStoreCredentials.cs" />
+    <Compile Include="Queries\MeasurementReadByDeviceTypePartitioner.cs" />
     <Compile Include="Queries\MeasurementReadCounter.cs" />
+    <Compile Include="Queries\MeasurementReadByDeviceTypePartitionerQuery.cs" />
     <Compile Include="Queries\MeasurementReadCounterQuery.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,10 +90,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Projections\Sources\MeterToDeviceType.js" />
+    <EmbeddedResource Include="Projections\Sources\MeasurementReadByDeviceTypePartitioner.js" />
     <EmbeddedResource Include="Projections\Sources\DeviceTypeRollingAveragePerWeekHour.js" />
     <Compile Include="Projections\MeasurementReadCounterProjection.cs" />
     <Content Include="Projections\Sources\References\1Prelude.js" />
+    <Content Include="Projections\Sources\Tests\MeasurementReadByDeviceTypePartitioner.js" />
     <Content Include="Projections\Sources\References\Modules.js" />
     <Content Include="Projections\Sources\References\ModulesExecuted.js" />
     <Content Include="Projections\Sources\References\Projections.js" />

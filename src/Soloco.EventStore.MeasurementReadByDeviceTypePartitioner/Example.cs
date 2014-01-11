@@ -3,18 +3,18 @@ using Soloco.EventStore.Test.MeasurementProjections.Infrastructure;
 using Soloco.EventStore.Test.MeasurementProjections.Projections;
 using Soloco.EventStore.Test.MeasurementProjections.Queries;
 
-namespace Soloco.EventStore.MeasurementProjections.MeasurmentReadCounter
+namespace Soloco.EventStore.MeasurementReadByDeviceTypePartitioner
 {
     internal class Example
     {
-        private readonly MeasurementReadCounterProjection _measurementReadCounterProjection;
-        private readonly MeasurementReadCounterQuery _measurementReadCounterQuery;
+        private readonly MeasurementReadByDeviceTypePartitionerProjection _measurementReadCounterProjection;
+        private readonly MeasurementReadByDeviceTypePartitionerQuery _measurementReadCounterQuery;
         private readonly EventReader _eventReader;
 
         private readonly DeviceSimulator _deviceSimulator;
         private readonly IConsole _console;
 
-        public Example(MeasurementReadCounterProjection measurementReadCounterProjection, MeasurementReadCounterQuery measurementReadCounterQuery, EventReader eventReader, DeviceSimulator deviceSimulator, IConsole console)
+        public Example(MeasurementReadByDeviceTypePartitionerProjection measurementReadCounterProjection, MeasurementReadByDeviceTypePartitionerQuery measurementReadCounterQuery, EventReader eventReader, DeviceSimulator deviceSimulator, IConsole console)
         {
             _measurementReadCounterProjection = measurementReadCounterProjection;
             _measurementReadCounterQuery = measurementReadCounterQuery;

@@ -2,7 +2,7 @@ using System;
 
 namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 {
-    public class ColorConsole : IColorConsole
+    public class Console : IConsole
     {
         private readonly object _lock = new object();
 
@@ -43,7 +43,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 
         public void ReadLine()
         {
-            Console.ReadLine();
+            System.Console.ReadLine();
         }
 
         private void Log(string message, object[] arguments, ConsoleColor color)
@@ -54,8 +54,8 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 
             lock (_lock)
             {
-                Console.ForegroundColor = color;
-                Console.WriteLine(value);
+                System.Console.ForegroundColor = color;
+                System.Console.WriteLine(value);
             }
         }
     }

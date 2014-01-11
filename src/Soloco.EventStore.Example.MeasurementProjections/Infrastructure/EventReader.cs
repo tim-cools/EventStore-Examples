@@ -8,9 +8,9 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
     public class EventReader
     {
         private readonly IEventStoreConnection _connection;
-        private readonly IColorConsole _console;
+        private readonly IConsole _console;
 
-        public EventReader(IEventStoreConnection connection, IColorConsole console)
+        public EventReader(IEventStoreConnection connection, IConsole console)
         {
             if (connection == null) throw new ArgumentNullException("connection");
             if (console == null) throw new ArgumentNullException("console");
