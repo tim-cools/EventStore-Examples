@@ -78,9 +78,7 @@
     <Compile Include="Projections\ProjectionSources.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\EventStoreCredentials.cs" />
-    <Compile Include="Queries\MeasurementReadByDeviceTypePartitioner.cs" />
     <Compile Include="Queries\MeasurementReadCounter.cs" />
-    <Compile Include="Queries\MeasurementReadByDeviceTypePartitionerQuery.cs" />
     <Compile Include="Queries\MeasurementReadCounterQuery.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -27,41 +27,47 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
         private void Appeared(EventStoreSubscription subscription, ResolvedEvent data)
         {
             var recordedEvent = data.Event;
-            var linkedStream = data.Link != null ? data.Link.EventStreamId : "<null>";
+            var linkedStream = data.Link != null ? data.Link.EventStreamId : null;
 
             if (IsSystemStream(linkedStream)) return;
 
-            switch (recordedEvent.EventType)
-            {
-                case "MeasurementRead":
-                    _console.Green("MeasurementRead: {0} (from: {1}, link: {2})", recordedEvent.ParseJson<MeasurementRead>(), recordedEvent.EventStreamId, linkedStream);
-                    break;
-                case "MeasurementPeriod":
-                    {
-                        var @event = recordedEvent.ParseJson<MeasurementPeriod>();
+            if (recordedEvent.EventType != "MeasurementRead") return;
 
-                        if (@event.Type == MeasurementPeriodType.Hour)
-                        {
-                            _console.Timings("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
-                        }
-                        else if (@event.Type == MeasurementPeriodType.Days)
-                        {
-                            _console.Magenta("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
-                        }
-                        else
-                        {
-                            _console.Cyan("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
-                        }
-                    }
-                    break;
-                default:
-                    break;
+            if (linkedStream == null)
+            {
+                _console.Green("MeasurementRead: {0} (stream: {1})",
+                    recordedEvent.ParseJson<MeasurementRead>(), recordedEvent.EventStreamId);
             }
+            else
+            {
+                _console.Log("MeasurementRead: {0} (link: {1})", recordedEvent.ParseJson<MeasurementRead>(),
+                    linkedStream);
+            }
+
+            //if (recordedEvent.EventType == "MeasurementPeriod")
+            //{
+            //    {
+            //        var @event = recordedEvent.ParseJson<MeasurementPeriod>();
+
+            //        if (@event.Type == MeasurementPeriodType.Hour)
+            //        {
+            //            _console.Timings("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
+            //        }
+            //        else if (@event.Type == MeasurementPeriodType.Days)
+            //        {
+            //            _console.Magenta("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
+            //        }
+            //        else
+            //        {
+            //            _console.Cyan("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
+            //        }
+            //    }
+            //}
         }
 
         private bool IsSystemStream(string linkedStream)
         {
-            return linkedStream.StartsWith("$");
+            return linkedStream != null && linkedStream.StartsWith("$");
         }
 
         private void Dropped(EventStoreSubscription subscription, SubscriptionDropReason subscriptionDropReason, Exception exception)
