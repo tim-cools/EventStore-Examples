@@ -57,7 +57,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Soloco.EventStore.Example.MeasurementProjections\Soloco.EventStore.MeasurementProjections.csproj">
+    <ProjectReference Include="..\Soloco.EventStore.MeasurementProjections\Soloco.EventStore.MeasurementProjections.csproj">
       <Project>{032171EC-1C3C-4077-8B39-5FAEB39787D8}</Project>
       <Name>Soloco.EventStore.MeasurementProjections</Name>
     </ProjectReference>
