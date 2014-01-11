@@ -11,11 +11,11 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
     public class ProjectionContext : IProjectionContext
     {
         private readonly ProjectionsManager _projections;
-        private readonly ColorConsole _console;
+        private readonly IColorConsole _console;
 
         private readonly IEnumerable<Projection> _currentProjections;
 
-        public ProjectionContext(ColorConsole console)
+        public ProjectionContext(IColorConsole console)
         {
             if (console == null) throw new ArgumentNullException("console");
 
@@ -65,14 +65,14 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 
         private void AddProjection(string name, string expectedQuery)
         {
-            _console.Log("Add projection: " + name);
+            _console.Important("Add projection: " + name);
 
             _projections.CreateContinuous(name, expectedQuery, EventStoreCredentials.Default);
         }
 
         private void UpdateProjection(string name, string expectedQuery)
         {
-            _console.Log("Update existing projection: " + name);
+            _console.Important("Update existing projection: " + name);
 
             var currentQuery = _projections.GetQuery(name, EventStoreCredentials.Default);
 
@@ -82,9 +82,9 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             }
         }
 
-        public T GetState<T>(string projectinoName)
+        public T GetState<T>(string projectionName)
         {
-            var state = _projections.GetState(projectinoName);
+            var state = _projections.GetState(projectionName);
             return state.ParseJson<T>();
         }
     }

@@ -47,7 +47,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Events
 
         public override int GetHashCode()
         {
-            return (_type != null ? _type.GetHashCode() : 0);
+            return _type.GetHashCode();
         }
 
         public override string ToString()

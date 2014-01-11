@@ -30,7 +30,7 @@ namespace Soloco.EventStore.MeasurementProjections.MeasurmentReadCounter
 
             ReadCounter();
 
-            _deviceSimulator.Start();
+            _deviceSimulator.Start(2, TimeSpan.FromSeconds(4));
 
             _console.ReadLine();
 
@@ -44,7 +44,6 @@ namespace Soloco.EventStore.MeasurementProjections.MeasurmentReadCounter
             var measurementReadCounter = _measurementReadCounterQuery.GetValue();
 
             _console.Magenta("MeasurementReadCounter (init) : " + measurementReadCounter);
-
         }
 
         private void ValueChanged(MeasurementReadCounter counter)

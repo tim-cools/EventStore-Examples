@@ -16,7 +16,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             Log(value, arguments, ConsoleColor.Green);
         }
 
-        public void Yellow(string value, params object[] arguments)
+        public void Timings(string value, params object[] arguments)
         {
             Log(value, arguments, ConsoleColor.Yellow);
         }
@@ -31,9 +31,14 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             Log(value, arguments, ConsoleColor.Cyan);
         }
 
-        public void Red(string value, params object[] arguments)
+        public void Error(string value, params object[] arguments)
         {
             Log(value, arguments, ConsoleColor.Red);
+        }
+
+        public void Important(string value, params object[] arguments)
+        {
+            Log(value, arguments, ConsoleColor.White);
         }
 
         public void ReadLine()

@@ -10,11 +10,14 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 {
     public class DeviceSimulator
     {
+        private static readonly Random Random = new Random();
+
         private readonly IEventStoreConnection _connection;
-        private readonly ColorConsole _console;
+        private readonly IColorConsole _console;
+
         private volatile bool _running;
 
-        public DeviceSimulator(IEventStoreConnection connection, ColorConsole console)
+        public DeviceSimulator(IEventStoreConnection connection, IColorConsole console)
         {
             if (connection == null) throw new ArgumentNullException("connection");
 
@@ -22,14 +25,16 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             _console = console;
         }
 
-        public void Start()
+        public void Start(int devices, TimeSpan eventInterval)
         {
             _running = true;
 
-            for (var i = 0; i < 1; i++)
+            var eventIntervalMilliseconds = (int) eventInterval.TotalMilliseconds;
+
+            for (var device = 0; device < devices; device++)
             {
-                var meter = i;
-                Task.Run(() => StartAsync(meter));
+                var deviceName = "Device-" + device;
+                Task.Run(() => StartAsync(deviceName, eventIntervalMilliseconds));
             }
         }
 
@@ -38,42 +43,51 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             _running = false;
         }
 
-        private async void StartAsync(int meter)
+        private async void StartAsync(string deviceName, int eventIntervalMilliseconds)
         {
-            var random = new Random();
-            var streamName = "Device-" + meter;
+            await AppendConfiguredEvent(deviceName);
 
-            await AppendConfiguredEvent(streamName);
-             
             var start = DateTime.Now;
-            var last = start;
-            var i = 1;
-            while(_running)
-            {
-                var @event = new MeasurementRead(start, random.Next(150, 300) / 10m)
-                    .AsJson();
 
-                await _connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, new[] { @event });
+            var last = start;
+            var eventsPublished = 1;
+
+            while (_running)
+            {
+                await AppendMeasurementReadEvent(start, Random, deviceName);
 
                 start = start.AddMinutes(60);
 
-                if (i % 100 == 0)
-                {
-                    _console.Red(streamName + ": 100 events duration ms " + (DateTime.Now - last).TotalMilliseconds);
-                    last = DateTime.Now;
-                }
-                Thread.Sleep(5000);
+                last = Log100Events(eventsPublished, deviceName, last);
 
-                i++;
+                Thread.Sleep(eventIntervalMilliseconds);
+
+                eventsPublished++;
             }
         }
 
-        private Task<WriteResult> AppendConfiguredEvent(string streamName)
+        private DateTime Log100Events(int i, string streamName, DateTime last)
         {
-            var @event = new DeviceConfigured("Fridge", streamName)
+            if (i % 100 != 0) return last;
+
+            _console.Timings(streamName + ": 100 events duration ms " + (DateTime.Now - last).TotalMilliseconds);
+            return DateTime.Now;
+        }
+
+        private async Task AppendMeasurementReadEvent(DateTime start, Random random, string deviceName)
+        {
+            var @event = new MeasurementRead(start, random.Next(150, 300) / 10m)
                 .AsJson();
 
-            return _connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, new[] { @event });
+            await _connection.AppendToStreamAsync(deviceName, ExpectedVersion.Any, new[] { @event });
+        }
+
+        private Task<WriteResult> AppendConfiguredEvent(string deviceName)
+        {
+            var @event = new DeviceConfigured("Fridge", deviceName)
+                .AsJson();
+
+            return _connection.AppendToStreamAsync(deviceName, ExpectedVersion.Any, new[] { @event });
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
 
                         if (@event.Type == MeasurementPeriodType.Hour)
                         {
-                            _console.Yellow("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
+                            _console.Timings("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
                         }
                         else if (@event.Type == MeasurementPeriodType.Days)
                         {
@@ -62,7 +62,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
             var message = string.Format("Subscription {0} dropped: {1} (Recovery currently not implemented){2}{3}",
                 subscription.StreamId, subscriptionDropReason, Environment.NewLine, exception);
 
-            _console.Red(message);
+            _console.Error(message);
         }
     }
 }

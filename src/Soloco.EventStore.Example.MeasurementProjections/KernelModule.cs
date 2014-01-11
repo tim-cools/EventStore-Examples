@@ -12,9 +12,12 @@ namespace Soloco.EventStore.Test.MeasurementProjections
             Kernel.Bind(scanner => scanner
                 .FromThisAssembly()
                 .SelectAllClasses()
-                .BindAllInterfaces());
+                .BindAllInterfaces()
+                .Configure(c => c.InSingletonScope()));
 
-            Kernel.Bind<IEventStoreConnection>().ToMethod(context => EventStoreConnectionFactory.Default());
+            Kernel.Bind<IEventStoreConnection>()
+                .ToMethod(context => EventStoreConnectionFactory.Default())
+                .InSingletonScope();
         }
     }
 }

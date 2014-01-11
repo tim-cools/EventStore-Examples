@@ -3,11 +3,10 @@
 
 describe("when counting measurement reads", function () {
     
+    var defaultEvent = { body: {} };
     var counter;
-    var defaultEvent;
 
     beforeEach(function () {
-        defaultEvent = { body: {} };
         counter = eventCounter();
     });
 

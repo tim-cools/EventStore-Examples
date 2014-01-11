@@ -5,5 +5,7 @@ namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
         void EnableProjection(string name);
         
         void EnsureProjection(string name, string source);
+
+        T GetState<T>(string projectionName);
     }
 }

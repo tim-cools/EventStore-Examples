@@ -6,7 +6,7 @@ var eventCounter = function () {
         return { count: 0 };
     };
      
-    var countEvents = function (state, eventEnvelope) {
+    var increase = function (state, eventEnvelope) {
 
         state.count += 1;
 
@@ -15,7 +15,7 @@ var eventCounter = function () {
 
     return {
         init: init,
-        increase: countEvents
+        increase: increase
     };
 };
 
