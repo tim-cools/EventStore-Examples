@@ -24,11 +24,18 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
             _console = console;
         }
 
+        public void ConfigureDevice(int device, string type)
+        {
+            var deviceName = "Device-" + device;
+
+            AppendConfiguredEvent(deviceName, type).Wait();
+        }
+
         public void Start(int devices, TimeSpan eventInterval)
         {
             _running = true;
 
-            var eventIntervalMilliseconds = (int) eventInterval.TotalMilliseconds;
+            var eventIntervalMilliseconds = (int)eventInterval.TotalMilliseconds;
 
             for (var device = 0; device < devices; device++)
             {
@@ -44,8 +51,6 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 
         private async void StartAsync(string deviceName, int eventIntervalMilliseconds)
         {
-            await AppendConfiguredEvent(deviceName);
-
             var start = DateTime.Now;
 
             var last = start;
@@ -58,10 +63,9 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
                 start = start.AddMinutes(60);
 
                 last = Log100Events(eventsPublished, deviceName, last);
+                eventsPublished++;
 
                 Thread.Sleep(eventIntervalMilliseconds);
-
-                eventsPublished++;
             }
         }
 
@@ -81,9 +85,9 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
             await _connection.AppendToStreamAsync(deviceName, ExpectedVersion.Any, new[] { @event });
         }
 
-        private Task<WriteResult> AppendConfiguredEvent(string deviceName)
+        private Task<WriteResult> AppendConfiguredEvent(string deviceName, string type)
         {
-            var @event = new DeviceConfigured("Fridge", deviceName)
+            var @event = new DeviceConfigured(type, deviceName)
                 .AsJson();
 
             return _connection.AppendToStreamAsync(deviceName, ExpectedVersion.Any, new[] { @event });

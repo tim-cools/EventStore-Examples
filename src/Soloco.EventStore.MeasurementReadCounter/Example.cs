@@ -3,21 +3,22 @@ using Soloco.EventStore.MeasurementProjections.Infrastructure;
 using Soloco.EventStore.MeasurementProjections.Projections;
 using Soloco.EventStore.MeasurementProjections.Queries;
 
-namespace Soloco.EventStore.MeasurmentReadCounter
+namespace Soloco.EventStore.MeasurementReadCounter
 {
     internal class Example
     {
-        private readonly MeasurementReadCounterProjection _measurementReadCounterProjection;
-        private readonly MeasurementReadCounterQuery _measurementReadCounterQuery;
+        private readonly MeasurementReadCounterProjection _projection;
+        private readonly MeasurementReadCounterQuery _counterQuery;
+
         private readonly EventReader _eventReader;
 
         private readonly DeviceSimulator _deviceSimulator;
         private readonly IConsole _console;
 
-        public Example(MeasurementReadCounterProjection measurementReadCounterProjection, MeasurementReadCounterQuery measurementReadCounterQuery, EventReader eventReader, DeviceSimulator deviceSimulator, IConsole console)
+        public Example(MeasurementReadCounterProjection projection, MeasurementReadCounterQuery counterQuery, EventReader eventReader, DeviceSimulator deviceSimulator, IConsole console)
         {
-            _measurementReadCounterProjection = measurementReadCounterProjection;
-            _measurementReadCounterQuery = measurementReadCounterQuery;
+            _projection = projection;
+            _counterQuery = counterQuery;
             _eventReader = eventReader;
             _deviceSimulator = deviceSimulator;
             _console = console;
@@ -25,7 +26,7 @@ namespace Soloco.EventStore.MeasurmentReadCounter
 
         public void Run()
         {
-            _measurementReadCounterProjection.Ensure();
+            _projection.Ensure();
             _eventReader.StartReading();
 
             ReadCounter();
@@ -39,14 +40,14 @@ namespace Soloco.EventStore.MeasurmentReadCounter
 
         private void ReadCounter()
         {
-            _measurementReadCounterQuery.SubscribeValueChange(ValueChanged);
+            _counterQuery.SubscribeValueChange(ValueChanged);
 
-            var measurementReadCounter = _measurementReadCounterQuery.GetValue();
+            var measurementReadCounter = _counterQuery.GetValue();
 
             _console.Magenta("MeasurementReadCounter (init) : " + measurementReadCounter);
         }
 
-        private void ValueChanged(MeasurementReadCounter counter)
+        private void ValueChanged(MeasurementProjections.Queries.MeasurementReadCounter counter)
         {
             _console.Magenta("MeasurementReadCounter: " + counter);
         }

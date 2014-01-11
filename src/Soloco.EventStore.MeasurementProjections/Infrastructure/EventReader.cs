@@ -26,13 +26,15 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 
         private void Appeared(EventStoreSubscription subscription, ResolvedEvent data)
         {
-            // if (data.Link != null) return;
-
             var recordedEvent = data.Event;
+            var linkedStream = data.Link != null ? data.Link.EventStreamId : "<null>";
+
+            if (IsSystemStream(linkedStream)) return;
+
             switch (recordedEvent.EventType)
             {
                 case "MeasurementRead":
-                    _console.Green("MeasurementRead: {0} (from: {1})", recordedEvent.ParseJson<MeasurementRead>(), recordedEvent.EventStreamId);
+                    _console.Green("MeasurementRead: {0} (from: {1}, link: {2})", recordedEvent.ParseJson<MeasurementRead>(), recordedEvent.EventStreamId, linkedStream);
                     break;
                 case "MeasurementPeriod":
                     {
@@ -55,6 +57,11 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
                 default:
                     break;
             }
+        }
+
+        private bool IsSystemStream(string linkedStream)
+        {
+            return linkedStream.StartsWith("$");
         }
 
         private void Dropped(EventStoreSubscription subscription, SubscriptionDropReason subscriptionDropReason, Exception exception)

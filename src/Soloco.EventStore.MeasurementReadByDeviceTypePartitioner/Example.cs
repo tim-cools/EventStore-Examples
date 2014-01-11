@@ -1,23 +1,23 @@
 ﻿using System;
 using Soloco.EventStore.MeasurementProjections.Infrastructure;
 using Soloco.EventStore.MeasurementProjections.Projections;
-using Soloco.EventStore.MeasurementProjections.Queries;
 
 namespace Soloco.EventStore.MeasurementReadByDeviceTypePartitioner
 {
     internal class Example
     {
-        private readonly MeasurementReadByDeviceTypePartitionerProjection _measurementReadCounterProjection;
-        private readonly MeasurementReadByDeviceTypePartitionerQuery _measurementReadCounterQuery;
+        private readonly IProjectionContext _projectionContext;
+        private readonly MeasurementReadByDeviceTypePartitionerProjection _projection;
+
         private readonly EventReader _eventReader;
 
         private readonly DeviceSimulator _deviceSimulator;
         private readonly IConsole _console;
 
-        public Example(MeasurementReadByDeviceTypePartitionerProjection measurementReadCounterProjection, MeasurementReadByDeviceTypePartitionerQuery measurementReadCounterQuery, EventReader eventReader, DeviceSimulator deviceSimulator, IConsole console)
+        public Example(IProjectionContext projectionContext, MeasurementReadByDeviceTypePartitionerProjection projection, EventReader eventReader, DeviceSimulator deviceSimulator, IConsole console)
         {
-            _measurementReadCounterProjection = measurementReadCounterProjection;
-            _measurementReadCounterQuery = measurementReadCounterQuery;
+            _projectionContext = projectionContext;
+            _projection = projection;
             _eventReader = eventReader;
             _deviceSimulator = deviceSimulator;
             _console = console;
@@ -25,30 +25,34 @@ namespace Soloco.EventStore.MeasurementReadByDeviceTypePartitioner
 
         public void Run()
         {
-            _measurementReadCounterProjection.Ensure();
+            EnsureProjections();
+
             _eventReader.StartReading();
 
-            ReadCounter();
+            ConfigureDevices();
 
-            _deviceSimulator.Start(2, TimeSpan.FromSeconds(4));
+            _deviceSimulator.Start(4, TimeSpan.FromSeconds(1));
 
             _console.ReadLine();
 
             Stop();
         }
 
-        private void ReadCounter()
+        private void ConfigureDevices()
         {
-            _measurementReadCounterQuery.SubscribeValueChange(ValueChanged);
+            _deviceSimulator.ConfigureDevice(0, "Fridge");
+            _deviceSimulator.ConfigureDevice(1, "TV");
 
-            var measurementReadCounter = _measurementReadCounterQuery.GetValue();
-
-            _console.Magenta("MeasurementReadCounter (init) : " + measurementReadCounter);
+            _deviceSimulator.ConfigureDevice(2, "Fridge");
+            _deviceSimulator.ConfigureDevice(3, "TV");
         }
 
-        private void ValueChanged(MeasurementReadCounter counter)
+        private void EnsureProjections()
         {
-            _console.Magenta("MeasurementReadCounter: " + counter);
+            _projectionContext.EnableProjection("$by_category");
+            _projectionContext.EnableProjection("$stream_by_category");
+
+            _projection.Ensure();
         }
 
         private void Stop()
