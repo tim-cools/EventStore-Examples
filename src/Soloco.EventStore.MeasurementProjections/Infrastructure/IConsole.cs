@@ -1,5 +1,5 @@
 
-namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {
     public interface IConsole
     {

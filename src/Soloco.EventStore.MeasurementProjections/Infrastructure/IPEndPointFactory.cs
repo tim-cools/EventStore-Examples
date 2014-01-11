@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {
     internal class IPEndPointFactory
     {

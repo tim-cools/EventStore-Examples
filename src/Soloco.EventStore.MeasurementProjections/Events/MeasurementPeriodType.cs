@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Soloco.EventStore.Test.MeasurementProjections.Events
+namespace Soloco.EventStore.MeasurementProjections.Events
 {
     public class MeasurementPeriodType
     {

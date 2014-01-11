@@ -1,4 +1,4 @@
-namespace Soloco.EventStore.Test.MeasurementProjections.Events
+namespace Soloco.EventStore.MeasurementProjections.Events
 {
     public class MeasurementPeriod
     {

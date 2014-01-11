@@ -1,9 +1,9 @@
 ﻿using System;
-using Soloco.EventStore.Test.MeasurementProjections.Infrastructure;
-using Soloco.EventStore.Test.MeasurementProjections.Projections;
-using Soloco.EventStore.Test.MeasurementProjections.Queries;
+using Soloco.EventStore.MeasurementProjections.Infrastructure;
+using Soloco.EventStore.MeasurementProjections.Projections;
+using Soloco.EventStore.MeasurementProjections.Queries;
 
-namespace Soloco.EventStore.MeasurementProjections.MeasurmentReadCounter
+namespace Soloco.EventStore.MeasurmentReadCounter
 {
     internal class Example
     {

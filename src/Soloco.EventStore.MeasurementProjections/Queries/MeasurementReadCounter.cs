@@ -1,4 +1,4 @@
-﻿namespace Soloco.EventStore.Test.MeasurementProjections.Queries
+﻿namespace Soloco.EventStore.MeasurementProjections.Queries
 {
     public class MeasurementReadCounter
     {

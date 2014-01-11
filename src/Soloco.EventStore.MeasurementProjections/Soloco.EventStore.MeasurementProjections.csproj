@@ -7,8 +7,8 @@
     <ProjectGuid>{032171EC-1C3C-4077-8B39-5FAEB39787D8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Soloco.EventStore.Test.MeasurementProjections</RootNamespace>
-    <AssemblyName>Soloco.EventStore.Test.MeasurementProjections</AssemblyName>
+    <RootNamespace>Soloco.EventStore.MeasurementProjections</RootNamespace>
+    <AssemblyName>Soloco.EventStore.MeasurementProjections</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

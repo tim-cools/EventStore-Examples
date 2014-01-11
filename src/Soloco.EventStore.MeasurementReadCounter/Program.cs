@@ -1,7 +1,6 @@
-﻿
-using Soloco.EventStore.Test.MeasurementProjections;
+﻿using Soloco.EventStore.MeasurementProjections;
 
-namespace Soloco.EventStore.MeasurementProjections.MeasurmentReadCounter
+namespace Soloco.EventStore.MeasurmentReadCounter
 {
     class Program
     {

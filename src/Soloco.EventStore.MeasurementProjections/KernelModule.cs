@@ -1,9 +1,9 @@
 ﻿using EventStore.ClientAPI;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using Soloco.EventStore.Test.MeasurementProjections.Infrastructure;
+using Soloco.EventStore.MeasurementProjections.Infrastructure;
 
-namespace Soloco.EventStore.Test.MeasurementProjections
+namespace Soloco.EventStore.MeasurementProjections
 {
     public class KernelModule : NinjectModule
     {

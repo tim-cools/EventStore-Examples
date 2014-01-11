@@ -4,9 +4,9 @@ using System.Linq;
 
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Common.Log;
-using Soloco.EventStore.Test.MeasurementProjections.Events;
+using Soloco.EventStore.MeasurementProjections.Events;
 
-namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {
     public class ProjectionContext : IProjectionContext
     {

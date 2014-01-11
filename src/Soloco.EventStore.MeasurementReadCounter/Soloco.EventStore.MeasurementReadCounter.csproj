@@ -7,8 +7,8 @@
     <ProjectGuid>{C1B2E9F0-4C31-4A1A-8C85-CBD214CD2142}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Soloco.EventStore.MeasurmentReadCounter</RootNamespace>
-    <AssemblyName>Soloco.EventStore.MeasurmentReadCounter</AssemblyName>
+    <RootNamespace>Soloco.EventStore.MeasurementReadCounter</RootNamespace>
+    <AssemblyName>Soloco.EventStore.MeasurementReadCounter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
-using Soloco.EventStore.Test.MeasurementProjections.Infrastructure;
+using Soloco.EventStore.MeasurementProjections.Infrastructure;
 
-namespace Soloco.EventStore.Test.MeasurementProjections.Projections
+namespace Soloco.EventStore.MeasurementProjections.Projections
 {
     public class MeasurementReadCounterProjection
     {

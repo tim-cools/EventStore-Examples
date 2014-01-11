@@ -1,6 +1,6 @@
 ﻿using Ninject;
 
-namespace Soloco.EventStore.Test.MeasurementProjections
+namespace Soloco.EventStore.MeasurementProjections
 {
     public static class KernelFactory
     {

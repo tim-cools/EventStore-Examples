@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.Measureme
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.MeasurementProjections", "Soloco.EventStore.MeasurementProjections\Soloco.EventStore.MeasurementProjections.csproj", "{032171EC-1C3C-4077-8B39-5FAEB39787D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.MeasurmentReadCounter", "Soloco.EventStore.MeasurementReadCounter\Soloco.EventStore.MeasurmentReadCounter.csproj", "{C1B2E9F0-4C31-4A1A-8C85-CBD214CD2142}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.MeasurementReadCounter", "Soloco.EventStore.MeasurementReadCounter\Soloco.EventStore.MeasurementReadCounter.csproj", "{C1B2E9F0-4C31-4A1A-8C85-CBD214CD2142}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

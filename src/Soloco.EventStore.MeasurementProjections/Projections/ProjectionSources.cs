@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Soloco.EventStore.Test.MeasurementProjections.Projections
+namespace Soloco.EventStore.MeasurementProjections.Projections
 {
     public static class ProjectionSources
     {

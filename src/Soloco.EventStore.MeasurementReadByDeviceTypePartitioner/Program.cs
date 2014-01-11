@@ -1,4 +1,4 @@
-﻿using Soloco.EventStore.Test.MeasurementProjections;
+﻿using Soloco.EventStore.MeasurementProjections;
 
 namespace Soloco.EventStore.MeasurementReadByDeviceTypePartitioner
 {

@@ -1,9 +1,9 @@
 using System;
 
 using EventStore.ClientAPI;
-using Soloco.EventStore.Test.MeasurementProjections.Events;
+using Soloco.EventStore.MeasurementProjections.Events;
 
-namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {
     public class EventReader
     {

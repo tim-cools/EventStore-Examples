@@ -3,10 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using EventStore.ClientAPI;
+using Soloco.EventStore.MeasurementProjections.Events;
 
-using Soloco.EventStore.Test.MeasurementProjections.Events;
-
-namespace Soloco.EventStore.Test.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {
     public class DeviceSimulator
     {

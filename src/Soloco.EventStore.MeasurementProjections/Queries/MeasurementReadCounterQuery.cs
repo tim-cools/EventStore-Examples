@@ -1,9 +1,9 @@
 ﻿using System;
 using EventStore.ClientAPI;
-using Soloco.EventStore.Test.MeasurementProjections.Events;
-using Soloco.EventStore.Test.MeasurementProjections.Infrastructure;
+using Soloco.EventStore.MeasurementProjections.Infrastructure;
+using Soloco.EventStore.MeasurementProjections.Events;
 
-namespace Soloco.EventStore.Test.MeasurementProjections.Queries
+namespace Soloco.EventStore.MeasurementProjections.Queries
 {
     public class MeasurementReadCounterQuery
     {
