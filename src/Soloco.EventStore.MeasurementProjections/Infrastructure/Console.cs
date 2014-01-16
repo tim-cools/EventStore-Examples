@@ -46,9 +46,14 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
             Log(value, arguments, ConsoleColor.White);
         }
 
-        public void ReadLine()
+        public void ReadKey(string message = null)
         {
-            System.Console.ReadLine();
+            if (message != null)
+            {
+                Important(message);
+            }
+
+            System.Console.ReadKey();
         }
 
         private void Log(string message, object[] arguments, ConsoleColor color)

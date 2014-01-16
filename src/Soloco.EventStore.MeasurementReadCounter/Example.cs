@@ -33,7 +33,7 @@ namespace Soloco.EventStore.MeasurementReadCounter
 
             _deviceSimulator.Start(2, TimeSpan.FromSeconds(1));
 
-            _console.ReadLine();
+            _console.ReadKey();
 
             Stop();
         }
@@ -56,7 +56,7 @@ namespace Soloco.EventStore.MeasurementReadCounter
         {
             _deviceSimulator.Stop();
 
-            _console.ReadLine();
+            _console.ReadKey();
         }
     }
 }

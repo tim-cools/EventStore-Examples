@@ -14,6 +14,6 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
         void Error(string message, params object[] arguments);
         void Important(string message, params object[] arguments);
 
-        void ReadLine();
+        void ReadKey(string message = null);
     }
 }

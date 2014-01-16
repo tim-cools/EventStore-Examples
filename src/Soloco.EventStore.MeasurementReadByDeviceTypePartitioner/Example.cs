@@ -33,7 +33,7 @@ namespace Soloco.EventStore.MeasurementReadByDeviceTypePartitioner
 
             _deviceSimulator.Start(4, TimeSpan.FromSeconds(1));
 
-            _console.ReadLine();
+            _console.ReadKey();
 
             Stop();
         }
@@ -59,7 +59,7 @@ namespace Soloco.EventStore.MeasurementReadByDeviceTypePartitioner
         {
             _deviceSimulator.Stop();
 
-            _console.ReadLine();
+            _console.ReadKey();
         }
     }
 }
