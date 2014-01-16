@@ -1,7 +1,6 @@
 using System;
 
 using EventStore.ClientAPI;
-using Soloco.EventStore.MeasurementProjections.Events;
 
 namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {
@@ -27,42 +26,26 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
         private void Appeared(EventStoreSubscription subscription, ResolvedEvent data)
         {
             var recordedEvent = data.Event;
-            var linkedStream = data.Link != null ? data.Link.EventStreamId : null;
+            if (IsSystemStream(recordedEvent.EventStreamId)) return;
 
+            var linkedStream = data.Link != null ? data.Link.EventStreamId : null;
             if (IsSystemStream(linkedStream)) return;
 
-            if (recordedEvent.EventType != "MeasurementRead") return;
+            var eventDefinition = KnownEvents.Get(recordedEvent);
 
-            if (linkedStream == null)
-            {
-                _console.Green("MeasurementRead: {0} (stream: {1})",
-                    recordedEvent.ParseJson<MeasurementRead>(), recordedEvent.EventStreamId);
-            }
-            else
-            {
-                _console.Log("MeasurementRead: {0} (link: {1})", recordedEvent.ParseJson<MeasurementRead>(),
-                    linkedStream);
-            }
+            _console.Log(
+                eventDefinition.Color,
+                "{0}: {1} ({2})",
+                recordedEvent.EventType,
+                eventDefinition.Parse(),
+                FormatStream(linkedStream, recordedEvent));
+        }
 
-            //if (recordedEvent.EventType == "MeasurementPeriod")
-            //{
-            //    {
-            //        var @event = recordedEvent.ParseJson<MeasurementPeriod>();
-
-            //        if (@event.Type == MeasurementPeriodType.Hour)
-            //        {
-            //            _console.Timings("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
-            //        }
-            //        else if (@event.Type == MeasurementPeriodType.Days)
-            //        {
-            //            _console.Magenta("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
-            //        }
-            //        else
-            //        {
-            //            _console.Cyan("Period Average Received: " + recordedEvent.EventStreamId + " | " + @event);
-            //        }
-            //    }
-            //}
+        private static string FormatStream(string linkedStream, RecordedEvent recordedEvent)
+        {
+            return linkedStream == null
+                ? "stream: " + recordedEvent.EventStreamId
+                : "link: " + linkedStream;
         }
 
         private bool IsSystemStream(string linkedStream)

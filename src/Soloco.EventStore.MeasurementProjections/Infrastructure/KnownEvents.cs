@@ -1,0 +1,22 @@
+using System;
+using EventStore.ClientAPI;
+using Soloco.EventStore.MeasurementProjections.Events;
+
+namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+{
+    internal class KnownEvents
+    {
+        public static KnownEvent Get(RecordedEvent recordedEvent)
+        {
+            if (recordedEvent.EventType == "MeasurementRead")
+            {
+                return new KnownEvent<MeasurementRead>(ConsoleColor.Green, recordedEvent);
+            }
+            if (recordedEvent.EventType == "MeasurementAverageDay")
+            {
+                return new KnownEvent<MeasurementAverageDay>(ConsoleColor.Magenta, recordedEvent);
+            }
+            return new KnownEvent(ConsoleColor.Yellow);
+        }
+    }
+}

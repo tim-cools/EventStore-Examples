@@ -1,12 +1,7 @@
 namespace Soloco.EventStore.MeasurementProjections.Events
 {
-    public class MeasurementPeriod
+    public class MeasurementAverageDay
     {
-        public MeasurementPeriodType Type
-        {
-            get { return MeasurementPeriodType.FromDigit(Timeslot); }
-        }
-        
         public string Timeslot { get; set; }
         public decimal Total { get; set; }
         public decimal Count { get; set; }
@@ -14,7 +9,7 @@ namespace Soloco.EventStore.MeasurementProjections.Events
 
         public override string ToString()
         {
-            return string.Format("Type: {0}, Timeslot: {1}, Total: {2}, Count: {3}, Average: {4}", Type, Timeslot, Total, Count, Average);
+            return string.Format("Timeslot: {0}, Total: {1}, Count: {2}, Average: {3}", Timeslot, Total, Count, Average);
         }
     }
 }

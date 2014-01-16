@@ -31,7 +31,7 @@ namespace Soloco.EventStore.MeasurementReadCounter
 
             ReadCounter();
 
-            _deviceSimulator.Start(2, TimeSpan.FromSeconds(4));
+            _deviceSimulator.Start(2, TimeSpan.FromSeconds(1));
 
             _console.ReadLine();
 

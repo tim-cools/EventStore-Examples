@@ -6,6 +6,11 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
     {
         private readonly object _lock = new object();
 
+        public void Log(ConsoleColor color, string value, params object[] arguments)
+        {
+            Log(value, arguments, color);
+        }
+
         public void Log(string value, params object[] arguments)
         {
             Log(value, arguments, ConsoleColor.Gray);
