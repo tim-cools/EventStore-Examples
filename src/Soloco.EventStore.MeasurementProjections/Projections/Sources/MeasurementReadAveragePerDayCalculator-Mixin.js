@@ -87,7 +87,9 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
     };
     
     var createState = function (state) {
-        if (state == null) { state = { total: 0, count: 0, lastTimestamp: null }; }
+        if (state == null) {
+             state = { total: 0, count: 0, lastTimestamp: null };
+        }
         
         return mixin.add(state, stateMixin);
     };
