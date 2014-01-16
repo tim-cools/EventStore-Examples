@@ -1,35 +1,7 @@
 /// <reference path="../References/jasmine/jasmine.js"/>
-/// <reference path="../MeasurementReadAveragePerDayCalculator.js"/>
+/// <reference path="../MeasurementReadAveragePerDayCalculator-Typed.js"/>
 
-
-describe("when formatting the timeframe", function () {
-
-    beforeEach(function () {
-
-        this.addMatchers({
-
-            toMatchTimeSlot: function (expected) {
-
-                this.actual = dailyTimestampFormatter.format(this.actual);
-                this.message = function () { return "Expected TimeSlot of '" + this.actual + "' to be '" + expected + "'"; };
-
-                return (this.actual == expected);
-            }
-        });
-    });
-
-    it("should contain year month and date", function () {
-
-        expect("2000-01-01T08:02:39.687Z").toMatchTimeSlot("2000/01/01");
-        expect("2005-06-24T08:02:39.687Z").toMatchTimeSlot("2005/06/24");
-        expect("2012-10-10T08:02:39.687Z").toMatchTimeSlot("2012/10/10");
-        expect("2015-11-12T08:02:39.687Z").toMatchTimeSlot("2015/11/12");
-        expect("2030-12-18T08:02:39.687Z").toMatchTimeSlot("2030/12/18");
-
-    });
-});
-
-describe("when projecting measurement reads average per day", function () {
+describe("when projecting measurement reads average per day (typed)", function () {
     
     var handler;
     var defaultEvent;
@@ -53,7 +25,6 @@ describe("when projecting measurement reads average per day", function () {
             expect(actcual).toEqual({
                 total: 1.23,
                 count: 1,
-                average: 1.23,
                 lastTimestamp: "2030-12-18T08:02:39.687Z"
             });
         });
@@ -71,7 +42,6 @@ describe("when projecting measurement reads average per day", function () {
             expect(state).toEqual({
                 total: 7.02,
                 count: 3,
-                average: 2.34,
                 lastTimestamp: "2030-12-18T10:02:39.687Z"
             });
         });
@@ -102,7 +72,6 @@ describe("when projecting measurement reads average per day", function () {
             expect(state).toEqual({
                 total: 8,
                 count: 2,
-                average: 4,
                 lastTimestamp: "2030-12-19T11:02:39.687Z"
             });
         });

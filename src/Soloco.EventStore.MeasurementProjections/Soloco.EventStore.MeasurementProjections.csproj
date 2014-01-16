@@ -91,7 +91,9 @@
     <EmbeddedResource Include="Projections\Sources\MeasurementReadByDeviceTypePartitioner.js" />
     <EmbeddedResource Include="Projections\Sources\DeviceTypeRollingAveragePerWeekHour.js" />
     <Compile Include="Projections\MeasurementReadCounterProjection.cs" />
+    <EmbeddedResource Include="Projections\Sources\MeasurementReadAveragePerDayCalculator-Typed.js" />
     <Content Include="Projections\Sources\References\1Prelude.js" />
+    <Content Include="Projections\Sources\Tests\MeasurementReadAveragePerDay-Typed.js" />
     <Content Include="Projections\Sources\Tests\MeasurementReadByDeviceTypePartitioner.js" />
     <Content Include="Projections\Sources\References\Modules.js" />
     <Content Include="Projections\Sources\References\ModulesExecuted.js" />
@@ -102,7 +104,7 @@
     <Content Include="Projections\Sources\References\Jasmine\jasmine-html.js" />
     <Content Include="Projections\Sources\References\Jasmine\jasmine.js" />
     <EmbeddedResource Include="Projections\Sources\MeasurementRead.js" />
-    <EmbeddedResource Include="Projections\Sources\MeasurementReadAveragePerDay.js" />
+    <EmbeddedResource Include="Projections\Sources\MeasurementReadAveragePerDayCalculator.js" />
     <EmbeddedResource Include="Projections\Sources\MeasurementReadRollingAveragePerWeekday.js" />
     <EmbeddedResource Include="Projections\Sources\MeasurementReadCounter.js" />
   </ItemGroup>
