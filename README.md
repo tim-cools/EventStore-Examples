@@ -14,7 +14,7 @@ Run following statement from command line to run EventStore with projections and
 lib\EventStore\EventStore.SingleNode.exe --run-projections=all --mem-db
 ```
 
-NOTE: These examples are based on the latest version at the time of writing. (11-jan-2014) For instructions on how to build the EventStrore see <a href="https://github.com/EventStore/EventStore">the official github page</a>.
+NOTE: These examples are based on the latest version at the time of writing. (16-jan-2014) For instructions on how to build the EventStrore see <a href="https://github.com/EventStore/EventStore">the official github page</a>.
 
 Run an Example
 ==============
