@@ -29,33 +29,5 @@ Blog Posts Series
 
 These examples are explained in a series of Blog post: http://www.soloco.be/eventstore-projections-by-example-series/
 
-Possible future posts
-=====================
-
-* ClientAPI C# Basics
-* Count number of events of a specific type
-
-(re) Partitioning (category)
-
-* Calculate average per day for a category
-* Calculate rolling average per weekday based average per day projection 
-* Calculate rolling average per hour of week for an aggregate stream
-
-* Alarm when consumption is larger as x for y time
-MeasurmentConfigureAlarm x, y (stored in state)
-MeasurmentRead { dateWhenAbove }
-
-
-* Unit Test Projections with Jasmine 
-  MVC, bug in R# that prevents debugger;
-  
-* Share JavaScript files between projections 
-
-* EventStore Projection Patterns
-  http://highlyscalable.wordpress.com/2012/02/01/mapreduce-patterns/
-  http://shop.oreilly.com/product/0636920025122.do
-* Visualize heat-map based on rolling average per hour of week projection with AngularJS
-* Create snapshot or read-model (?)
-
 Have Fun!
 =========
