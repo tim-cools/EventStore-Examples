@@ -1,7 +1,14 @@
 EventStore Projection Examples
 ==============================
 
-Some fun stuff with EventStore JavaScript projections
+Some fun stuff with EventStore JavaScript projections.
+
+Projections and Tests
+=====================
+
+If you are only interssted in the Javascript Projection and their tests you can have a look here:
+
+https://github.com/tim-cools/EventStore-Examples/tree/master/src/Soloco.EventStore.MeasurementProjections/Projections/Sources
 
 Run EventStore
 ==============
@@ -14,7 +21,9 @@ Run following statement from command line to run EventStore with projections and
 lib\EventStore\EventStore.SingleNode.exe --run-projections=all --mem-db
 ```
 
-NOTE: These examples are based on the latest version at the time of writing. (16-jan-2014) For instructions on how to build the EventStrore see <a href="https://github.com/EventStore/EventStore">the official github page</a>.
+NOTE: The examples are based on the latest version from the main branch at the time of writing 2.5. Because I noticed that it is rather important to use the Client API against the same version of the EventStore, I included the binaries in the github repository. This allows you to check out the examples and run them, without worrying about the compatible versions or building the EventStore yourself.
+
+For instructions on how to build the EventStrore see <a href="https://github.com/EventStore/EventStore">the official github page</a>.
 
 Run an Example
 ==============
