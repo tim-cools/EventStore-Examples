@@ -13,9 +13,8 @@ https://github.com/tim-cools/EventStore-Examples/tree/master/src/Soloco.EventSto
 Run EventStore
 ==============
 
-Ensure to run EventStore as administrator and to use parameter enable projections when running he event store
+To run the example, ensure to run the EventStore as administraor and with the <em>--run-projections=all</em> flag set. The following statement from command line runs the EventStore with projections enabled and an in-memory database.
 
-Run following statement from command line to run EventStore with projections and an in-memory database
 
 ```
 lib\EventStore\EventStore.SingleNode.exe --run-projections=all --mem-db
