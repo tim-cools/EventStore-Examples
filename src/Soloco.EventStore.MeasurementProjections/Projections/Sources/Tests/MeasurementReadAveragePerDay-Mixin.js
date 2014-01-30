@@ -1,5 +1,5 @@
 /// <reference path="../References/jasmine/jasmine.js"/>
-/// <reference path="../MeasurementReadAveragePerDayCalculator-Typed.js"/>
+/// <reference path="../MeasurementReadAveragePerDayCalculator-Mixin.js"/>
 
 describe("when projecting measurement reads average per day (typed)", function () {
     
@@ -20,7 +20,7 @@ describe("when projecting measurement reads average per day (typed)", function (
             var event = { body: { Timestamp: "2030-12-18T08:02:39.687Z", Reading: 1.23 } };
             var state = handler.init();
             
-            var actcual = handler.handleEvent(state, event);
+            var actcual = handler.update(state, event);
 
             expect(actcual).toEqual({
                 total: 1.23,
@@ -32,12 +32,12 @@ describe("when projecting measurement reads average per day (typed)", function (
 
     describe("given events are in the same timeslot", function () {
 
-        it("should return calculate average for all events", function() {
+        it("should return calculated average for all events", function() {
 
             var state = handler.init();
-            state = handler.handleEvent(state, { body: { Timestamp: "2030-12-18T08:00:39.687Z", Reading: 1.23 } });
-            state = handler.handleEvent(state, { body: { Timestamp: "2030-12-18T09:01:39.687Z", Reading: 2.34 } });
-            state = handler.handleEvent(state, { body: { Timestamp: "2030-12-18T10:02:39.687Z", Reading: 3.45 } });
+            state = handler.update(state, { body: { Timestamp: "2030-12-18T08:00:39.687Z", Reading: 1.23 } });
+            state = handler.update(state, { body: { Timestamp: "2030-12-18T09:01:39.687Z", Reading: 2.34 } });
+            state = handler.update(state, { body: { Timestamp: "2030-12-18T10:02:39.687Z", Reading: 3.45 } });
 
             expect(state).toEqual({
                 total: 7.02,
@@ -53,10 +53,10 @@ describe("when projecting measurement reads average per day (typed)", function (
         
         beforeEach(function () {
             state = handler.init();
-            state = handler.handleEvent(state, { streamId: "device1", body: { Timestamp: "2030-12-18T08:00:39.687Z", Reading: 1.23 } });
-            state = handler.handleEvent(state, { streamId: "device1", body: { Timestamp: "2030-12-18T09:01:39.687Z", Reading: 2.34 } });
-            state = handler.handleEvent(state, { streamId: "device1", body: { Timestamp: "2030-12-19T10:02:39.687Z", Reading: 3.44 } });
-            state = handler.handleEvent(state, { streamId: "device1", body: { Timestamp: "2030-12-19T11:02:39.687Z", Reading: 4.56 } });
+            state = handler.update(state, { streamId: "device1", body: { Timestamp: "2030-12-18T08:00:39.687Z", Reading: 1.23 } });
+            state = handler.update(state, { streamId: "device1", body: { Timestamp: "2030-12-18T09:01:39.687Z", Reading: 2.34 } });
+            state = handler.update(state, { streamId: "device1", body: { Timestamp: "2030-12-19T10:02:39.687Z", Reading: 3.44 } });
+            state = handler.update(state, { streamId: "device1", body: { Timestamp: "2030-12-19T11:02:39.687Z", Reading: 4.56 } });
         });
 
         it("an event with calculated average of first timeframe should be emitted", function () {
@@ -67,7 +67,7 @@ describe("when projecting measurement reads average per day (typed)", function (
             );
         });
         
-        it("should return calculate average for events of new timeframe", function () {
+        it("should return calculated average for events of new timeframe", function () {
 
             expect(state).toEqual({
                 total: 8,

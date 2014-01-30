@@ -33,9 +33,9 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
             == dailyTimestampFormatter.format(lastTimestamp);
     };
 
-    var createEvent = function (timeslot, reading, count) {
+    var createEvent = function (timeStamp, reading, count) {
         return {
-            Timeslot: timeslot,
+            Timeslot: dailyTimestampFormatter.format(timeStamp),
             Total: reading,
             Count: count,
             Average: reading / count
@@ -54,7 +54,7 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
     var emitAverageEvent = function (measurementEvent, previousState) {
 
         var streamName = 'MeasurementAverageDay-' + measurementEvent.streamId;
-        var event = createEvent(dailyTimestampFormatter.format(previousState.lastTimestamp), previousState.total, previousState.count);
+        var event = createEvent(previousState.lastTimestamp, previousState.total, previousState.count);
 
         eventServices.emit(streamName, "MeasurementAverageDay", event);
     };
@@ -63,7 +63,7 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
         return createState(0, 0, null);
     };
     
-    var handleEvent = function (previousState, measurementEvent) {
+    var update = function (previousState, measurementEvent) {
 
         var timestamp = measurementEvent.body.Timestamp;
         var reading = measurementEvent.body.Reading;
@@ -82,7 +82,7 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
 
     return {
         init: init,
-        handleEvent: handleEvent
+        update: update
     };
 };
 
@@ -92,5 +92,5 @@ fromCategory('Device')
     .foreachStream()
     .when({
         $init: calculator.init,
-        MeasurementRead: calculator.handleEvent
+        MeasurementRead: calculator.update
     });

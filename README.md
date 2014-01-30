@@ -20,7 +20,7 @@ To run the example, ensure to run the EventStore as administraor and with the <e
 lib\EventStore\EventStore.SingleNode.exe --run-projections=all --mem-db
 ```
 
-NOTE: The examples are based on the latest version from the main branch at the time of writing 2.5. Because I noticed that it is rather important to use the Client API against the same version of the EventStore, I included the binaries in the github repository. This allows you to check out the examples and run them, without worrying about the compatible versions or building the EventStore yourself.
+NOTE: The examples are based on the latest version from the main branch at the time of writing (v3.0.0rc1). Because I noticed that it is rather important to use the Client API against the same version of the EventStore, I included the binaries in the github repository. This allows you to check out the examples and run them, without worrying about the compatible versions or building the EventStore yourself.
 
 For instructions on how to build the EventStrore see <a href="https://github.com/EventStore/EventStore">the official github page</a>.
 

@@ -20,7 +20,7 @@ var dailyTimestampFormatter = function dailyTimestampFormatterConstructr() {
     };
 }();
 
-var mixin = function mixinConstructr() {
+var mixin = function mixinConstructor() {
 
     var add = function (destination, mixin) {
         for (var k in mixin) {
@@ -50,7 +50,7 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
 
     var eventServices = !$eventServices ? { emit: emit } : $eventServices;   
 
-    var stateMixin = {
+    var calculationMixin = {
 
         getAverage: function () {
             return this.total / this.count;
@@ -65,10 +65,10 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
         update: function (reading, timestamp) {
 
             if (this.isFirstTime() || this.isSameTimeSlot(timestamp)) {
-                return createState({ total: this.total + reading, count: this.count + 1, lastTimestamp: timestamp });
+                return createCalculation({ total: this.total + reading, count: this.count + 1, lastTimestamp: timestamp });
             }
 
-            return createState({ total: reading, count: 1, lastTimestamp: timestamp });
+            return createCalculation({ total: reading, count: 1, lastTimestamp: timestamp });
         },
         isInDifferentTimeSlotAs: function (previousState) {
             return !previousState.isFirstTime() && !this.isSameTimeSlot(previousState.timeStamp);
@@ -81,17 +81,17 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
                 Average: this.getAverage()
             };
         },
-        clean: function () {
-            return mixin.remove(this, stateMixin);
+        toState: function () {
+            return mixin.remove(this, calculationMixin);
         }
     };
     
-    var createState = function (state) {
+    var createCalculation = function (state) {
         if (state == null) {
              state = { total: 0, count: 0, lastTimestamp: null };
         }
         
-        return mixin.add(state, stateMixin);
+        return mixin.add(state, calculationMixin);
     };
     
     var emitAverageEvent = function (measurementEvent, state) {
@@ -102,23 +102,23 @@ var measurementReadAveragPerDayCalculator = function measurementReadAveragPerDay
             state.createEvent());
     };
 
-    var handleEvent = function (previousState, measurementEvent) {
+    var update = function (previousState, measurementEvent) {
 
         var timestamp = measurementEvent.body.Timestamp;
         var reading = measurementEvent.body.Reading;
         
-        var state = createState(previousState);
-        var updatedState = state.update(reading, timestamp);
+        var calculation = createCalculation(previousState);
+        var newCalculation = calculation.update(reading, timestamp);
         
-        if (updatedState.isInDifferentTimeSlotAs(state)) {
-            emitAverageEvent(measurementEvent, state);
+        if (newCalculation.isInDifferentTimeSlotAs(calculation)) {
+            emitAverageEvent(measurementEvent, calculation);
         }
-        return updatedState.clean();
+        return newCalculation.toState();
     };
 
     return {
-        init: createState,
-        handleEvent: handleEvent
+        init: createCalculation,
+        update: update
     };
 };
 
