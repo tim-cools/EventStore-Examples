@@ -1,6 +1,7 @@
 using System;
 
 using EventStore.ClientAPI;
+using Soloco.EventStore.Core.Infrastructure;
 
 namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {

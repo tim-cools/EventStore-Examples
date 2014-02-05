@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventStore.ClientAPI;
+using Soloco.EventStore.Core.Infrastructure;
 using Soloco.EventStore.MeasurementProjections.Infrastructure;
 using Soloco.EventStore.MeasurementProjections.Events;
 

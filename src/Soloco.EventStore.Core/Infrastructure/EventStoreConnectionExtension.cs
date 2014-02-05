@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using EventStore.ClientAPI;
-using Soloco.EventStore.MeasurementProjections.Events;
 
-namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.Core.Infrastructure
 {
     public static class EventStoreConnectionExtension
     {

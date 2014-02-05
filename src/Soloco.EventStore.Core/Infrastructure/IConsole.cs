@@ -1,7 +1,7 @@
 
 using System;
 
-namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.Core.Infrastructure
 {
     public interface IConsole
     {

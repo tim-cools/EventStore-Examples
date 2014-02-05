@@ -1,4 +1,4 @@
-namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.Core.Infrastructure
 {
     public interface IProjectionContext
     {

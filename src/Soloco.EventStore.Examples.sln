@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.Measureme
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.MeasurementReadAveragePerDayCalculator", "Soloco.EventStore.MeasurementReadAveragePerDayCalculator\Soloco.EventStore.MeasurementReadAveragePerDayCalculator.csproj", "{006935BD-0139-4D09-962D-40EDFCE70354}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.IrresponsibleGamblingNotifier", "Soloco.EventStore.IrresponsibleGamblingNotifier\Soloco.EventStore.IrresponsibleGamblingNotifier.csproj", "{64601FA5-8333-4CEE-BAB5-783A008FC2EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.Core", "Soloco.EventStore.Core\Soloco.EventStore.Core.csproj", "{A714F3F2-899C-4CCE-81F2-3984EA7F034E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.GamblingGameProjections", "Soloco.EventStore.GamblingGameProjections\Soloco.EventStore.GamblingGameProjections.csproj", "{620BE33D-0416-48DE-991F-F61C2783A733}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,18 @@ Global
 		{006935BD-0139-4D09-962D-40EDFCE70354}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{006935BD-0139-4D09-962D-40EDFCE70354}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{006935BD-0139-4D09-962D-40EDFCE70354}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64601FA5-8333-4CEE-BAB5-783A008FC2EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64601FA5-8333-4CEE-BAB5-783A008FC2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64601FA5-8333-4CEE-BAB5-783A008FC2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64601FA5-8333-4CEE-BAB5-783A008FC2EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A714F3F2-899C-4CCE-81F2-3984EA7F034E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A714F3F2-899C-4CCE-81F2-3984EA7F034E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A714F3F2-899C-4CCE-81F2-3984EA7F034E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A714F3F2-899C-4CCE-81F2-3984EA7F034E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{620BE33D-0416-48DE-991F-F61C2783A733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{620BE33D-0416-48DE-991F-F61C2783A733}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{620BE33D-0416-48DE-991F-F61C2783A733}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{620BE33D-0416-48DE-991F-F61C2783A733}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

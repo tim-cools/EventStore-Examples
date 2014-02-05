@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using EventStore.ClientAPI;
+using Soloco.EventStore.Core.Infrastructure;
 using Soloco.EventStore.MeasurementProjections.Events;
 
 namespace Soloco.EventStore.MeasurementProjections.Infrastructure

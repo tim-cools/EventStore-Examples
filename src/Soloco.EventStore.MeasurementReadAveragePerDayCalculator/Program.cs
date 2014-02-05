@@ -1,4 +1,5 @@
-﻿using Soloco.EventStore.MeasurementProjections;
+﻿using Soloco.EventStore.Core;
+using Soloco.EventStore.MeasurementProjections;
 
 namespace Soloco.EventStore.MeasurementReadAveragePerDayCalculator
 {
@@ -6,7 +7,7 @@ namespace Soloco.EventStore.MeasurementReadAveragePerDayCalculator
     {
         static void Main()
         {
-            var example = KernelFactory.Get<Example>();
+            var example = KernelFactory.Get<Example>(Measurements.Assembly);
 
             example.Run();
         }

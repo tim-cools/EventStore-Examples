@@ -58,30 +58,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\EventStoreCredentials - Copy.cs" />
     <Compile Include="Infrastructure\KnownEvent.cs" />
     <Compile Include="Infrastructure\KnownEvents.cs" />
-    <Compile Include="KernelModule.cs" />
-    <Compile Include="Events\JsonEvent.cs" />
+    <Compile Include="Measurements.cs" />
     <Compile Include="Events\MeasurementPeriodType.cs" />
     <Compile Include="Events\DeviceConfigured.cs" />
     <Compile Include="Events\MeasurementRead.cs" />
     <Compile Include="Events\MeasurementAverageDay.cs" />
-    <Compile Include="Infrastructure\EventStoreConnectionFactory.cs" />
-    <Compile Include="Infrastructure\IProjectionContext.cs" />
-    <Compile Include="Infrastructure\Console.cs" />
-    <Compile Include="Infrastructure\IConsole.cs" />
-    <Compile Include="KernelFactory.cs" />
-    <Compile Include="Infrastructure\Projection.cs" />
     <Compile Include="Infrastructure\EventReader.cs" />
-    <Compile Include="Infrastructure\ProjectionContext.cs" />
     <Compile Include="Infrastructure\DeviceSimulator.cs" />
-    <Compile Include="Infrastructure\IPEndPointFactory.cs" />
     <Compile Include="Projections\MeasurementReadByDeviceTypePartitionerProjection.cs" />
     <Compile Include="Projections\MeasurementReadAveragePerDayProjection.cs" />
     <Compile Include="Projections\ProjectionSources.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Infrastructure\EventStoreCredentials.cs" />
     <Compile Include="Queries\MeasurementReadAveragePerDay.cs" />
     <Compile Include="Queries\MeasurementReadCounter.cs" />
     <Compile Include="Queries\MeasurementReadAveragePerDayQuery.cs" />
@@ -92,7 +81,12 @@
     <None Include="packages.config" />
     <None Include="Projections\Sources\References\Jasmine\MIT.LICENSE" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Soloco.EventStore.Core\Soloco.EventStore.Core.csproj">
+      <Project>{A714F3F2-899C-4CCE-81F2-3984EA7F034E}</Project>
+      <Name>Soloco.EventStore.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Projections\Sources\MeasurementReadByDeviceTypePartitioner.js" />
     <EmbeddedResource Include="Projections\Sources\DeviceTypeRollingAveragePerWeekHour.js" />

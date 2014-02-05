@@ -1,6 +1,6 @@
 ﻿using EventStore.ClientAPI;
 
-namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.Core.Infrastructure
 {
     public static class EventStoreConnectionFactory
     {

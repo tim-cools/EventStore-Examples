@@ -1,5 +1,5 @@
 ﻿using System;
-using Soloco.EventStore.MeasurementProjections.Infrastructure;
+using Soloco.EventStore.Core.Infrastructure;
 
 namespace Soloco.EventStore.MeasurementProjections.Projections
 {

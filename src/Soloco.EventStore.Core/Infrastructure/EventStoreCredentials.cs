@@ -1,6 +1,6 @@
 ﻿using EventStore.ClientAPI.SystemData;
 
-namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.Core.Infrastructure
 {
     public class EventStoreCredentials
     {

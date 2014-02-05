@@ -1,4 +1,5 @@
 ﻿using System;
+using Soloco.EventStore.Core.Infrastructure;
 using Soloco.EventStore.MeasurementProjections.Infrastructure;
 using Soloco.EventStore.MeasurementProjections.Projections;
 using Soloco.EventStore.MeasurementProjections.Queries;

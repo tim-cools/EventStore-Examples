@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +54,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Soloco.EventStore.Core\Soloco.EventStore.Core.csproj">
+      <Project>{A714F3F2-899C-4CCE-81F2-3984EA7F034E}</Project>
+      <Name>Soloco.EventStore.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Soloco.EventStore.MeasurementProjections\Soloco.EventStore.MeasurementProjections.csproj">
       <Project>{032171EC-1C3C-4077-8B39-5FAEB39787D8}</Project>
       <Name>Soloco.EventStore.MeasurementProjections</Name>

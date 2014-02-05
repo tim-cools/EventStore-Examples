@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Common.Log;
-using Soloco.EventStore.MeasurementProjections.Events;
 
-namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.Core.Infrastructure
 {
     public class ProjectionContext : IProjectionContext
     {
