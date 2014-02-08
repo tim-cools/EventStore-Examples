@@ -1,11 +1,9 @@
 using System;
 using EventStore.ClientAPI;
-using Soloco.EventStore.Core.Infrastructure;
-using Soloco.EventStore.MeasurementProjections.Events;
 
-namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.Core.Infrastructure
 {
-    internal class KnownEvent
+    public class KnownEvent
     {
         public ConsoleColor Color { get; private set; }
 
@@ -20,7 +18,7 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
         }
     }
 
-    internal class KnownEvent<TEvent> : KnownEvent
+    public class KnownEvent<TEvent> : KnownEvent
     {
         private readonly RecordedEvent _recordedEvent;
 
@@ -34,7 +32,7 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 
         public override object Parse()
         {
-            return _recordedEvent.ParseJson<TEvent>();
+            return _recordedEvent.ParseJson<TEvent>().AsJsonString();
         }
     }
 }

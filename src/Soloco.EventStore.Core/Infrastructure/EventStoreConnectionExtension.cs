@@ -20,6 +20,16 @@ namespace Soloco.EventStore.Core.Infrastructure
                 : ReadResult<T>(connection, streamName, lastEventNumber.Value);
         }
 
+        public static T GetLastEvent<T>(this IEventStoreConnection connection, string streamName) 
+            where T : class 
+        {
+            var lastEvent = connection.ReadEvent(streamName, -1, false, EventStoreCredentials.Default);
+            if (lastEvent == null || lastEvent.Event == null) return null;
+
+            return lastEvent.Event.Value.ParseJson<T>();
+        }
+
+        
         private static int? GetLastEventNumber(this IEventStoreConnection connection, string streamName)
         {
             var lastEvent = connection.ReadEvent(streamName, -1, false, EventStoreCredentials.Default);

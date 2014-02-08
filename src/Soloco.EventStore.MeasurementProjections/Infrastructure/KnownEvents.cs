@@ -1,12 +1,13 @@
 using System;
 using EventStore.ClientAPI;
+using Soloco.EventStore.Core.Infrastructure;
 using Soloco.EventStore.MeasurementProjections.Events;
 
 namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {
-    internal class KnownEvents
+    internal class KnownEvents : IKnownEventsProvider
     {
-        public static KnownEvent Get(RecordedEvent recordedEvent)
+        public KnownEvent Get(RecordedEvent recordedEvent)
         {
             if (recordedEvent.EventType == "MeasurementRead")
             {

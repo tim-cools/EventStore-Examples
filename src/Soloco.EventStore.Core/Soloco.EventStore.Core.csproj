@@ -56,14 +56,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\Bus.cs" />
+    <Compile Include="Infrastructure\IBus.cs" />
+    <Compile Include="Infrastructure\EventReader.cs" />
     <Compile Include="Infrastructure\Console.cs" />
     <Compile Include="Infrastructure\EventStoreConnectionExtension.cs" />
     <Compile Include="Infrastructure\EventStoreConnectionFactory.cs" />
     <Compile Include="Infrastructure\EventStoreCredentials.cs" />
     <Compile Include="Infrastructure\IConsole.cs" />
+    <Compile Include="Infrastructure\IKnownEventsProvider.cs" />
     <Compile Include="Infrastructure\IPEndPointFactory.cs" />
     <Compile Include="Infrastructure\IProjectionContext.cs" />
+    <Compile Include="Infrastructure\IdGenerator.cs" />
     <Compile Include="Infrastructure\JsonEventExtensions.cs" />
+    <Compile Include="Infrastructure\KnownEvent.cs" />
     <Compile Include="Infrastructure\Projection.cs" />
     <Compile Include="Infrastructure\ProjectionContext.cs" />
     <Compile Include="KernelFactory.cs" />

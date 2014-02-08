@@ -60,10 +60,6 @@
       <Project>{620BE33D-0416-48DE-991F-F61C2783A733}</Project>
       <Name>Soloco.EventStore.GamblingGameProjections</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Soloco.EventStore.MeasurementProjections\Soloco.EventStore.MeasurementProjections.csproj">
-      <Project>{032171EC-1C3C-4077-8B39-5FAEB39787D8}</Project>
-      <Name>Soloco.EventStore.MeasurementProjections</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

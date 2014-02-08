@@ -20,6 +20,7 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
         public DeviceSimulator(IEventStoreConnection connection, IConsole console)
         {
             if (connection == null) throw new ArgumentNullException("connection");
+            if (console == null) throw new ArgumentNullException("console");
 
             _connection = connection;
             _console = console;
@@ -81,7 +82,7 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
         private async Task AppendMeasurementReadEvent(DateTime start, Random random, string deviceName)
         {
             var @event = new MeasurementRead(start, random.Next(150, 300) / 10m)
-                .AsJson();
+                .AsJsonEvent();
 
             await _connection.AppendToStreamAsync(deviceName, ExpectedVersion.Any, new[] { @event });
         }
@@ -89,7 +90,7 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
         private Task<WriteResult> AppendConfiguredEvent(string deviceName, string type)
         {
             var @event = new DeviceConfigured(type, deviceName)
-                .AsJson();
+                .AsJsonEvent();
 
             return _connection.AppendToStreamAsync(deviceName, ExpectedVersion.Any, new[] { @event });
         }

@@ -58,14 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\KnownEvent.cs" />
     <Compile Include="Infrastructure\KnownEvents.cs" />
     <Compile Include="Measurements.cs" />
     <Compile Include="Events\MeasurementPeriodType.cs" />
     <Compile Include="Events\DeviceConfigured.cs" />
     <Compile Include="Events\MeasurementRead.cs" />
     <Compile Include="Events\MeasurementAverageDay.cs" />
-    <Compile Include="Infrastructure\EventReader.cs" />
     <Compile Include="Infrastructure\DeviceSimulator.cs" />
     <Compile Include="Projections\MeasurementReadByDeviceTypePartitionerProjection.cs" />
     <Compile Include="Projections\MeasurementReadAveragePerDayProjection.cs" />

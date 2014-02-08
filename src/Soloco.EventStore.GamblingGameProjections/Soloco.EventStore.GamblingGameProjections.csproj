@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EventStore.ClientAPI, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\EventStore\EventStore.ClientAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Conventions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ninject.extensions.conventions.3.0.0.11\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,8 +51,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\Game\GamePlayerResult.cs" />
+    <Compile Include="Events\Player\GameWon.cs" />
+    <Compile Include="Events\Player\GameLost.cs" />
+    <Compile Include="Events\IrresponsibleGambler\IrresponsibleGamblerDetected.cs" />
+    <Compile Include="Events\IrresponsibleGambler\IrresponsibleGamblerNotifierState.cs" />
+    <Compile Include="Events\Game\GameOver.cs" />
     <Compile Include="GamblingGame.cs" />
+    <Compile Include="Infrastructure\DeviceSimulator.cs" />
+    <Compile Include="Infrastructure\KnownEvents.cs" />
+    <Compile Include="KernelModule.cs" />
+    <Compile Include="Projections\IrresponsibleGamblerAlarmPublisher.cs" />
+    <Compile Include="Projections\IrresponsibleGamblingDetectorProjection.cs" />
+    <Compile Include="Projections\GameOverToPlayerDistributorProjection.cs" />
+    <Compile Include="Projections\ProjectionSources.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Projections\Sources\GameOverToPlayerDistributor.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Projections\Sources\IrresponsibleGamblingDetector.js" />
+    <Content Include="Projections\Sources\References\1Prelude.js" />
+    <Content Include="Projections\Sources\References\Jasmine\jasmine-html.js" />
+    <Content Include="Projections\Sources\References\Jasmine\jasmine.js" />
+    <Content Include="Projections\Sources\References\Modules.js" />
+    <Content Include="Projections\Sources\References\ModulesExecuted.js" />
+    <Content Include="Projections\Sources\References\Projections.js" />
+    <Content Include="Projections\Sources\Tests\GameOverToPlayerDistributor.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Projections\Sources\References\Jasmine\MIT.LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="obj\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Soloco.EventStore.Core\Soloco.EventStore.Core.csproj">
+      <Project>{A714F3F2-899C-4CCE-81F2-3984EA7F034E}</Project>
+      <Name>Soloco.EventStore.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

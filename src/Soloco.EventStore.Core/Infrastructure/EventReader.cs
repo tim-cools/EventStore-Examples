@@ -1,22 +1,23 @@
 using System;
-
 using EventStore.ClientAPI;
-using Soloco.EventStore.Core.Infrastructure;
 
-namespace Soloco.EventStore.MeasurementProjections.Infrastructure
+namespace Soloco.EventStore.Core.Infrastructure
 {
     public class EventReader
     {
         private readonly IEventStoreConnection _connection;
         private readonly IConsole _console;
+        private readonly IKnownEventsProvider _knownEventsProvider;
 
-        public EventReader(IEventStoreConnection connection, IConsole console)
+        public EventReader(IEventStoreConnection connection, IConsole console, IKnownEventsProvider knownEventsProvider)
         {
             if (connection == null) throw new ArgumentNullException("connection");
             if (console == null) throw new ArgumentNullException("console");
+            if (knownEventsProvider == null) throw new ArgumentNullException("knownEventsProvider");
 
             _connection = connection;
             _console = console;
+            _knownEventsProvider = knownEventsProvider;
         }
 
         public void StartReading()
@@ -32,7 +33,7 @@ namespace Soloco.EventStore.MeasurementProjections.Infrastructure
             var linkedStream = data.Link != null ? data.Link.EventStreamId : null;
             if (IsSystemStream(linkedStream)) return;
 
-            var eventDefinition = KnownEvents.Get(recordedEvent);
+            var eventDefinition = _knownEventsProvider.Get(recordedEvent);
 
             _console.Log(
                 eventDefinition.Color,

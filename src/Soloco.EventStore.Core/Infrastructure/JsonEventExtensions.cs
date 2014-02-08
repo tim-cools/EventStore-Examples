@@ -7,7 +7,14 @@ namespace Soloco.EventStore.Core.Infrastructure
 {
     public static class JsonEventExtensions
     {
-        public static EventData AsJson(this object value)
+        public static string AsJsonString(this object value)
+        {
+            if (value == null) throw new ArgumentNullException("value");
+
+            return JsonConvert.SerializeObject(value, Formatting.Indented);
+        }
+
+        public static EventData AsJsonEvent(this object value)
         {
             if (value == null) throw new ArgumentNullException("value");
 
