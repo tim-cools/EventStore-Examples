@@ -11,9 +11,13 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
 {
     public class GameSimulator
     {
-        private const int NumberOfPlayers = 15;
-        private const int EventIntervalMilliseconds = 3000;
+        private const int NumberOfPlayers = 2;
+        private const int MinimumPlayersPerGame = 1;
+        private const int MaximumPlayersPerGame = 2;
+        
+        private const int EventIntervalMilliseconds = 2000;
         private const string GameStreamName = "Game-";
+        private const string PLayerStreamName = "Player-";
 
         private static readonly string[] PlayerIds = new string[NumberOfPlayers];
         private static readonly Random Random = new Random();
@@ -26,7 +30,7 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
         {
             for (var player = 0; player < NumberOfPlayers; player++)
             {
-                PlayerIds[player] = IdGenerator.New();
+                PlayerIds[player] = PLayerStreamName + IdGenerator.New();
             }
         }
 
@@ -49,13 +53,13 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
             _running = false;
         }
 
-        private async void StartAsync()
+        private void StartAsync()
         {
             var start = DateTime.Now;
 
             while (_running)
             {
-                await AppendGameOverEvent(start);
+                AppendGameOverEvent(start);
 
                 start = start.AddMinutes(60);
 
@@ -63,16 +67,14 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
             }
         }
 
-        private async Task AppendGameOverEvent(DateTime start)
+        private void AppendGameOverEvent(DateTime start)
         {
-            var id = IdGenerator.New();
+            var id = GameStreamName + IdGenerator.New();
 
             var @event = new GameOver(id, start, RandomPlayers())
                 .AsJsonEvent();
 
-            var streamName = GameStreamName + id;
-
-            await _connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, new[] {@event});
+            _connection.AppendToStream(id, ExpectedVersion.Any, new[] {@event});
         }
 
         private IEnumerable<GamePlayerResult> RandomPlayers()
@@ -84,12 +86,12 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
 
         private static int RandomAmount()
         {
-            return Random.Next(0, 200) - 100;
+            return Random.Next(0, 200) - 170;
         }
 
         private static IEnumerable<string> RandomPlayerIds()
         {
-            var players = Random.Next(3, 9);
+            var players = Random.Next(MinimumPlayersPerGame, MaximumPlayersPerGame);
             var used = new List<int>();
             for (var player = 0; player < players; player++)
             {

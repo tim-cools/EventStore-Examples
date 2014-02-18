@@ -58,7 +58,7 @@
     <Compile Include="Events\IrresponsibleGambler\IrresponsibleGamblerNotifierState.cs" />
     <Compile Include="Events\Game\GameOver.cs" />
     <Compile Include="GamblingGame.cs" />
-    <Compile Include="Infrastructure\DeviceSimulator.cs" />
+    <Compile Include="Infrastructure\GameSimulator.cs" />
     <Compile Include="Infrastructure\KnownEvents.cs" />
     <Compile Include="KernelModule.cs" />
     <Compile Include="Projections\IrresponsibleGamblerAlarmPublisher.cs" />
@@ -78,6 +78,7 @@
     <Content Include="Projections\Sources\References\Modules.js" />
     <Content Include="Projections\Sources\References\ModulesExecuted.js" />
     <Content Include="Projections\Sources\References\Projections.js" />
+    <Content Include="Projections\Sources\Tests\IrresponsibleGamblingDetector.js" />
     <Content Include="Projections\Sources\Tests\GameOverToPlayerDistributor.js" />
   </ItemGroup>
   <ItemGroup>

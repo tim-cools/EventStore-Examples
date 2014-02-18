@@ -16,9 +16,9 @@ namespace Soloco.EventStore.GamblingGameProjections.Projections
 
         public void Ensure()
         {
-            var projectionSource = ProjectionSources.Read("GameOverToPlayerDistributor");
+            var projectionSource = ProjectionSources.Read("IrresponsibleGamblingDetector");
 
-            _projectionsContext.EnsureProjection("GameOverToPlayerDistributor", projectionSource);
+            _projectionsContext.EnsureProjection("IrresponsibleGamblingDetector", projectionSource);
         }
     }
 }

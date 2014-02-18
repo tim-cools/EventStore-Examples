@@ -8,16 +8,17 @@ namespace Soloco.EventStore.GamblingGameProjections.Events.Game
     {
         public string GameId { get; private set; }
 
-        public DateTime TimeStamp { get; private set; }
+        public DateTime Timestamp { get; private set; }
 
         public IEnumerable<GamePlayerResult> PlayerResults { get; private set; }
 
-        public GameOver(string gameId, DateTime timeStamp, IEnumerable<GamePlayerResult> playerResults)
+        public GameOver(string gameId, DateTime timestamp, IEnumerable<GamePlayerResult> playerResults)
         {
+            if (gameId == null) throw new ArgumentNullException("gameId");
             if (playerResults == null) throw new ArgumentNullException("playerResults");
 
             GameId = gameId;
-            TimeStamp = timeStamp;
+            Timestamp = timestamp;
             PlayerResults = playerResults;
         }
     }

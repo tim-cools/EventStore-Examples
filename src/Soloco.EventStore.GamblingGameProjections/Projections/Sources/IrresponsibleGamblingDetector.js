@@ -5,16 +5,20 @@ var irresponsibleGamblingDetector = function irresponsibleGamblingDetectorConstu
 
     var eventServices = !$eventServices ? { emit: emit } : $eventServices;
 
-    var createEvent = function (playerId, totalAmount) {
+    var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    var amountLostThreshold = 500;
+    
+    var createEvent = function (playerId, totalAmount, timestamp) {
         return {
             PlayerId: playerId,
-            TotalAmount: totalAmount,
+            AmountSpendLAst24Hours: totalAmount,
+            Timestamp: timestamp
         };
     };
 
-    var emitAlarm = function (playerId, total)  {
+    var emitAlarm = function (playerId, total, timestamp)  {
 
-        var event = createEvent(playerId, total);
+        var event = createEvent(playerId, total, timestamp);
 
         eventServices.emit('IrresponsibleGamblingAlarms', 'IrresponsibleGamblerDetected', event);
     };
@@ -22,69 +26,77 @@ var irresponsibleGamblingDetector = function irresponsibleGamblingDetectorConstu
     var init = function () {
         return {            
             LastAlarm: null,
-            GamesLast24Hour: []
+            GamesLast24Hour: [],
         };
     };
 
     var isMoreAs24HoursDifference = function (timestamp, reference) {
 
-        if (timestamp === null) return true;
-        
+        if (reference === null) return true;
+
+        var millisecondsDifference = new Date(timestamp).getTime() - new Date(reference).getTime();
+
+        return millisecondsDifference > millisecondsPerDay  ;
     };
     
-    var process = function (previousState, playerId, timestamp, amount) {
-
+    var process = function (previousState, playerId, timestamp, amount, sequenceNumber, e) {
+        
         var gamesResults = previousState.GamesLast24Hour;
 
-        while (gamesResults.count > 0 && isMoreAs24HoursDifference(gamesResults[0].Timestamp, timestamp)) {
-            previousState.pop(0);
+        for (var resultIndex = 0; resultIndex < gamesResults.length; resultIndex++) {
+            var result = gamesResults[resultIndex];
+            if (result.SequenceNumber == sequenceNumber) {
+
+                eventServices.emit('IrresponsibleGamblingAlarmsIdempotence', 'CheckFailed', {
+                    PlayerId : playerId, SequenceNumber: sequenceNumber
+                });
+
+                return previousState;
+            }
         }
 
-        gamesResults.push({ Timestamp: timestamp, Amount: amount });
+        while (gamesResults.length > 0 && isMoreAs24HoursDifference(timestamp, gamesResults[0].Timestamp)) {
+            gamesResults.pop(0);
+        }
+
+        gamesResults.push({ Timestamp: timestamp, Amount: amount, SequenceNumber: sequenceNumber, PlayerId: playerId });
             
         var total = 0;
-        for (var resultIndex = 0; resultIndex < gamesResults; resultIndex++) {
-            var result = gamesResults;
+        for (var resultIndex = 0; resultIndex < gamesResults.length; resultIndex++) {
+            var result = gamesResults[resultIndex];
             total += result.Amount;
         }
         
-        if (total > 500 && isMoreAs24HoursDifference(previousState.LastAlarm, timestamp)) {
+        if (total < -amountLostThreshold && isMoreAs24HoursDifference(timestamp, previousState.LastAlarm)) {
             previousState.LastAlarm = timestamp;
-            emitAlarm(playerId, total);
+            emitAlarm(playerId, total, timestamp);
         }
         
         return previousState;
     };
 
-    var processGameLost = function (previousState, measurementEvent) {
+    var processEvent = function (previousState, event) {
 
-        var playerId = measurementEvent.body.PlayerId;
-        var timestamp = measurementEvent.body.Timestamp;
-        var amount = measurementEvent.body.Amount;
-
-        return process(previousState, playerId, timestamp, amount);
-    };
-
-    var processGameWon = function (previousState, measurementEvent) {
-
-        var timestamp = measurementEvent.body.Timestamp;
-        var amount = measurementEvent.body.Amount;
-
-        return process(previousState, timestamp, amount);
+        var playerId = event.body.PlayerId;
+        var timestamp = event.body.Timestamp;
+        var amount = event.body.Amount;
+        
+        return process(previousState, playerId, timestamp, amount, event.sequenceNumber);
     };
 
     return {
         init: init,
-        processGameLost: processGameLost,
-        processGameWon: processGameWon
+        processGameLost: processEvent,
+        processGameWon: processEvent
     };
 };
 
 var detector = irresponsibleGamblingDetector();
 
-fromCategory('Game')
+fromCategory('Player')
     .foreachStream()
     .when({
+        $init: detector.init,
         GameLost: detector.processGameLost,
         GameWon: detector.processGameWon
     });

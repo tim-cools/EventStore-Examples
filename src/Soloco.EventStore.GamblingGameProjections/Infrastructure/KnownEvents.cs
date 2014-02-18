@@ -2,6 +2,7 @@ using System;
 using EventStore.ClientAPI;
 using Soloco.EventStore.Core.Infrastructure;
 using Soloco.EventStore.GamblingGameProjections.Events.Game;
+using Soloco.EventStore.GamblingGameProjections.Events.IrresponsibleGambler;
 using Soloco.EventStore.GamblingGameProjections.Events.Player;
 
 namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
@@ -21,6 +22,10 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
             if (recordedEvent.EventType == "GameLost")
             {
                 return new KnownEvent<GameLost>(ConsoleColor.Magenta, recordedEvent);
+            }
+            if (recordedEvent.EventType == "IrresponsibleGamblerDetected")
+            {
+                return new KnownEvent<IrresponsibleGamblerDetected>(ConsoleColor.Red, recordedEvent);
             }
             return new KnownEvent(ConsoleColor.Yellow);
         }
