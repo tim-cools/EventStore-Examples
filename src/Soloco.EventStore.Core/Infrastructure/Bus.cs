@@ -2,7 +2,7 @@
 
 namespace Soloco.EventStore.Core.Infrastructure
 {
-    class Bus : IBus
+    public class Bus : IBus
     {
         private readonly IConsole _console;
 

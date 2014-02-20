@@ -20,7 +20,7 @@ describe("when distributing GameOver event to to players", function () {
                 distributor.process({}, {
                     body: {
                         GameId: 'Game-abc',
-                        Timestamp: '',
+                        Timestamp: '2014-02-20T08:02:39.687Z',
                         PlayerResults: [
                             { PlayerId: 'Player-p1', Amount: 100 }
                         ]
@@ -28,19 +28,23 @@ describe("when distributing GameOver event to to players", function () {
                 });
 
                 expect(projections.emit)
-                   .wasCalledWith("Player-p1", "GameWon",
-                       { PlayerId: 'Player-p1', GameId: 'Game-abc', Amount: 100 });
+                   .wasCalledWith("Player-p1", "GameWon", {
+                       PlayerId: 'Player-p1',
+                       GameId: 'Game-abc',
+                       Amount: 100,
+                       Timestamp: '2014-02-20T08:02:39.687Z'
+                   });
             });
         });
 
-        describe("given amount is negative", function() {
+        describe("given amount is negative", function () {
 
-            it("should emit a GameLost event to the player stream", function() {
+            it("should emit a GameLost event to the player stream", function () {
 
                 distributor.process({}, {
                     body: {
                         GameId: 'Game-abc',
-                        Timestamp: '',
+                        Timestamp: '2014-02-20T08:02:39.687Z',
                         PlayerResults: [
                             { PlayerId: 'Player-p1', Amount: -100 }
                         ]
@@ -48,24 +52,28 @@ describe("when distributing GameOver event to to players", function () {
                 });
 
                 expect(projections.emit)
-                    .wasCalledWith("Player-p1", "GameLost",
-                        { PlayerId: 'Player-p1', GameId: 'Game-abc', Amount: -100 });
+                    .wasCalledWith("Player-p1", "GameLost", {
+                        PlayerId: 'Player-p1',
+                        GameId: 'Game-abc',
+                        Amount: -100,
+                        Timestamp: '2014-02-20T08:02:39.687Z'
+                    });
             });
         });
-        
+
 
         describe("given multiple players", function () {
 
-            beforeEach(function() {
+            beforeEach(function () {
                 distributor.process({}, {
                     body: {
                         GameId: 'Game-abc',
-                        Timestamp: '',
+                        Timestamp: '2014-02-20T08:02:39.687Z',
                         PlayerResults: [
                             { PlayerId: 'Player-p1', Amount: -100 },
-                            { PlayerId: 'Player-p2', Amount:   80 },
-                            { PlayerId: 'Player-p3', Amount:  -40 },
-                            { PlayerId: 'Player-p4', Amount:   20 }
+                            { PlayerId: 'Player-p2', Amount: 80 },
+                            { PlayerId: 'Player-p3', Amount: -40 },
+                            { PlayerId: 'Player-p4', Amount: 20 }
                         ]
                     }
                 });
@@ -74,23 +82,39 @@ describe("when distributing GameOver event to to players", function () {
             it("should emit a GameWon event to the winning players stream", function () {
 
                 expect(projections.emit)
-                    .wasCalledWith("Player-p2", "GameWon",
-                        { PlayerId: 'Player-p2', GameId: 'Game-abc', Amount: 80 });
+                    .wasCalledWith("Player-p2", "GameWon", {
+                        PlayerId: 'Player-p2',
+                        GameId: 'Game-abc',
+                        Amount: 80,
+                        Timestamp: '2014-02-20T08:02:39.687Z',
+                    });
 
                 expect(projections.emit)
-                    .wasCalledWith("Player-p4", "GameWon",
-                        { PlayerId: 'Player-p4', GameId: 'Game-abc', Amount: 20 });
+                    .wasCalledWith("Player-p4", "GameWon", {
+                        PlayerId: 'Player-p4',
+                        GameId: 'Game-abc',
+                        Amount: 20,
+                        Timestamp: '2014-02-20T08:02:39.687Z',
+                    });
             });
 
             it("should emit a GameLost event to the losing players stream", function () {
 
                 expect(projections.emit)
-                    .wasCalledWith("Player-p1", "GameLost",
-                        { PlayerId: 'Player-p1', GameId: 'Game-abc', Amount: -100 });
+                    .wasCalledWith("Player-p1", "GameLost", {
+                        PlayerId: 'Player-p1',
+                        GameId: 'Game-abc',
+                        Amount: -100,
+                        Timestamp: '2014-02-20T08:02:39.687Z',
+                    });
 
                 expect(projections.emit)
-                    .wasCalledWith("Player-p3", "GameLost",
-                        { PlayerId: 'Player-p3', GameId: 'Game-abc', Amount: -40 });
+                    .wasCalledWith("Player-p3", "GameLost", {
+                        PlayerId: 'Player-p3',
+                        GameId: 'Game-abc',
+                        Amount: -40,
+                        Timestamp: '2014-02-20T08:02:39.687Z',
+                    });
             });
         });
     });

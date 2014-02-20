@@ -6,7 +6,11 @@ namespace Soloco.EventStore.Core.Infrastructure
     {
         public static IEventStoreConnection Default()
         {
-            var connection = EventStoreConnection.Create(IPEndPointFactory.DefaultTcp());
+            var settings = ConnectionSettings.Create()
+                .KeepReconnecting()
+                .UseConsoleLogger();
+
+            var connection = EventStoreConnection.Create(settings, IPEndPointFactory.DefaultTcp());            
             connection.Connect();
             return connection;
         }

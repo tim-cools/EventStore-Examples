@@ -38,50 +38,76 @@ var irresponsibleGamblingDetector = function irresponsibleGamblingDetectorConstu
 
         return millisecondsDifference > millisecondsPerDay  ;
     };
-    
-    var process = function (previousState, playerId, timestamp, amount, sequenceNumber, e) {
-        
-        var gamesResults = previousState.GamesLast24Hour;
 
-        for (var resultIndex = 0; resultIndex < gamesResults.length; resultIndex++) {
-            var result = gamesResults[resultIndex];
-            if (result.SequenceNumber == sequenceNumber) {
-
-                eventServices.emit('IrresponsibleGamblingAlarmsIdempotence', 'CheckFailed', {
-                    PlayerId : playerId, SequenceNumber: sequenceNumber
-                });
-
-                return previousState;
-            }
-        }
+    var removeGamesOlderThan24HoursFromCache = function (gamesResults, timestamp) {
 
         while (gamesResults.length > 0 && isMoreAs24HoursDifference(timestamp, gamesResults[0].Timestamp)) {
             gamesResults.pop(0);
         }
+    };
+    
+    var addNewGameToCache = function (gamesResults, timestamp, amount, sequenceNumber) {
 
-        gamesResults.push({ Timestamp: timestamp, Amount: amount, SequenceNumber: sequenceNumber, PlayerId: playerId });
-            
+        gamesResults.push({ Timestamp: timestamp, Amount: amount, SequenceNumber: sequenceNumber });
+    };
+    
+    var updateChachedGamesLast24Hour = function (gamesResults, timestamp, amount, sequenceNumber) {
+
+        removeGamesOlderThan24HoursFromCache(gamesResults, timestamp);
+        addNewGameToCache(gamesResults, timestamp, amount, sequenceNumber);
+    };
+
+    var calculateTotalAmount = function (gamesResults) {
+
         var total = 0;
         for (var resultIndex = 0; resultIndex < gamesResults.length; resultIndex++) {
             var result = gamesResults[resultIndex];
             total += result.Amount;
         }
+        return total;
+    };
+
+    var idempotent = function (gamesResults, sequenceNumber) {
         
-        if (total < -amountLostThreshold && isMoreAs24HoursDifference(timestamp, previousState.LastAlarm)) {
-            previousState.LastAlarm = timestamp;
+        for (var resultIndex = 0; resultIndex < gamesResults.length; resultIndex++) {
+
+            var result = gamesResults[resultIndex];
+            if (result.SequenceNumber == sequenceNumber) {
+                return false;
+            }
+        }
+        
+        return true;
+    };
+
+    var process = function (state, playerId, timestamp, amount, sequenceNumber) {
+        
+        var gamesResults = state.GamesLast24Hour;
+
+        if (!idempotent(gamesResults, sequenceNumber)) {
+            return state;
+        }
+
+        updateChachedGamesLast24Hour(gamesResults, timestamp, amount, sequenceNumber);
+
+        var total = calculateTotalAmount(gamesResults);
+        
+        if (total < -amountLostThreshold && isMoreAs24HoursDifference(timestamp, state.LastAlarm)) {
+            
+            state.LastAlarm = timestamp;
             emitAlarm(playerId, total, timestamp);
         }
         
-        return previousState;
+        return state;
     };
 
-    var processEvent = function (previousState, event) {
+    var processEvent = function (state, event) {
 
         var playerId = event.body.PlayerId;
         var timestamp = event.body.Timestamp;
         var amount = event.body.Amount;
         
-        return process(previousState, playerId, timestamp, amount, event.sequenceNumber);
+        return process(state, playerId, timestamp, amount, event.sequenceNumber);
     };
 
     return {

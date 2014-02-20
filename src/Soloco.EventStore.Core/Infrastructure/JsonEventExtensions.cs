@@ -14,15 +14,21 @@ namespace Soloco.EventStore.Core.Infrastructure
             return JsonConvert.SerializeObject(value, Formatting.Indented);
         }
 
+        public static EventData AsJsonEvent(this string value, string eventName)
+        {
+            var bytes = Encoding.UTF8.GetBytes(value);
+
+            return new EventData(Guid.NewGuid(), eventName, true, bytes, null);
+        }
+
         public static EventData AsJsonEvent(this object value)
         {
             if (value == null) throw new ArgumentNullException("value");
 
             var json = JsonConvert.SerializeObject(value);
-            var data = Encoding.UTF8.GetBytes(json);
             var eventName = value.GetType().Name;
-
-            return new EventData(Guid.NewGuid(), eventName, true, data, new byte[] { });
+            
+            return json.AsJsonEvent(eventName);
         }
 
         public static T ParseJson<T>(this RecordedEvent data)

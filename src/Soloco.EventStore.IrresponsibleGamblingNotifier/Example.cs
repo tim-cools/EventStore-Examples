@@ -10,13 +10,14 @@ namespace Soloco.EventStore.IrresponsibleGamblingNotifier
 
         private readonly GameOverToPlayerDistributorProjection _distributorProjection;
         private readonly IrresponsibleGamblingDetectorProjection _detectorProjection;
+        private readonly IrresponsibleGamblerAlarmPublisher _irresponsibleGamblerAlarmPublisher;
 
         private readonly EventReader _eventReader;
 
         private readonly GameSimulator _simulator;
         private readonly IConsole _console;
 
-        public Example(IProjectionContext projectionContext, EventReader eventReader, GameSimulator simulator, IConsole console, GameOverToPlayerDistributorProjection distributorProjection, IrresponsibleGamblingDetectorProjection detectorProjection)
+        public Example(IProjectionContext projectionContext, EventReader eventReader, GameSimulator simulator, IConsole console, GameOverToPlayerDistributorProjection distributorProjection, IrresponsibleGamblingDetectorProjection detectorProjection, IrresponsibleGamblerAlarmPublisher irresponsibleGamblerAlarmPublisher)
         {
             _projectionContext = projectionContext;
             _eventReader = eventReader;
@@ -24,6 +25,7 @@ namespace Soloco.EventStore.IrresponsibleGamblingNotifier
             _console = console;
             _distributorProjection = distributorProjection;
             _detectorProjection = detectorProjection;
+            _irresponsibleGamblerAlarmPublisher = irresponsibleGamblerAlarmPublisher;
         }
 
         public void Run()
@@ -46,6 +48,8 @@ namespace Soloco.EventStore.IrresponsibleGamblingNotifier
 
             _distributorProjection.Ensure();
             _detectorProjection.Ensure();
+            
+            _irresponsibleGamblerAlarmPublisher.Start();
         }
 
         private void Stop()

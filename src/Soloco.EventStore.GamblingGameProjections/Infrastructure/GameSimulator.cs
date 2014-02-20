@@ -9,13 +9,15 @@ using Soloco.EventStore.GamblingGameProjections.Events.Game;
 
 namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
 {
+    //NOTE: This is a really lame / unrealistic gambling game simulator
+
     public class GameSimulator
     {
         private const int NumberOfPlayers = 2;
         private const int MinimumPlayersPerGame = 1;
         private const int MaximumPlayersPerGame = 2;
-        
-        private const int EventIntervalMilliseconds = 2000;
+
+        private const int EventIntervalMilliseconds = 1000;
         private const string GameStreamName = "Game-";
         private const string PLayerStreamName = "Player-";
 
@@ -23,6 +25,7 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
         private static readonly Random Random = new Random();
 
         private readonly IEventStoreConnection _connection;
+        private readonly IConsole _console;
 
         private volatile bool _running;
 
@@ -34,11 +37,13 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
             }
         }
 
-        public GameSimulator(IEventStoreConnection connection)
+        public GameSimulator(IEventStoreConnection connection, IConsole console)
         {
             if (connection == null) throw new ArgumentNullException("connection");
+            if (console == null) throw new ArgumentNullException("console");
 
             _connection = connection;
+            _console = console;
         }
 
         public void Start()
@@ -60,7 +65,6 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
             while (_running)
             {
                 AppendGameOverEvent(start);
-
                 start = start.AddMinutes(60);
 
                 Thread.Sleep(EventIntervalMilliseconds);
@@ -74,7 +78,7 @@ namespace Soloco.EventStore.GamblingGameProjections.Infrastructure
             var @event = new GameOver(id, start, RandomPlayers())
                 .AsJsonEvent();
 
-            _connection.AppendToStream(id, ExpectedVersion.Any, new[] {@event});
+            _connection.AppendToStream(id, ExpectedVersion.Any, new[] { @event });
         }
 
         private IEnumerable<GamePlayerResult> RandomPlayers()

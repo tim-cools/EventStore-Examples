@@ -25,6 +25,7 @@ describe("when detecting irresponsible gamblers", function () {
                     body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -100, Timestamp: '2013-12-18T08:02:39.687Z' }
                 });
             });
+            
             it("state should contain the one amount", function () {
 
                 expect(state).toEqual({
@@ -49,10 +50,12 @@ describe("when detecting irresponsible gamblers", function () {
 
                 state = detector.init();
                 state = detector.processGameLost(state, {
+                    sequenceNumber: 1,
                     body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -100, Timestamp: '2013-12-18T08:02:39.687Z' }
                 });
 
                 state = detector.processGameLost(state, {
+                    sequenceNumber: 2,
                     body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -401, Timestamp: '2013-12-19T08:02:39.687Z' }
                 });
             });
@@ -62,8 +65,8 @@ describe("when detecting irresponsible gamblers", function () {
                 expect(state).toEqual({
                     LastAlarm: '2013-12-19T08:02:39.687Z',
                     GamesLast24Hour: [
-                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100 },
-                        { Timestamp: '2013-12-19T08:02:39.687Z', Amount: -401 }
+                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100, SequenceNumber: 1 },
+                        { Timestamp: '2013-12-19T08:02:39.687Z', Amount: -401, SequenceNumber: 2 }
                     ]
                 });
             });
@@ -71,7 +74,7 @@ describe("when detecting irresponsible gamblers", function () {
             it("should emit an alarm", function () {
 
                 expect(projections.emit).wasCalledWith("IrresponsibleGamblingAlarms", "IrresponsibleGamblerDetected",
-                    { PlayerId: 'Player-1', TotalAmount: -501 }
+                    { PlayerId: 'Player-1', AmountSpendLAst24Hours: -501, Timestamp: '2013-12-19T08:02:39.687Z' }
                 );
             });
         });
@@ -85,11 +88,13 @@ describe("when detecting irresponsible gamblers", function () {
 
                 state = detector.init();
                 state = detector.processGameLost(state, {
+                    sequenceNumber: 1,
                     body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -100, Timestamp: '2013-12-18T08:02:39.687Z' }
                 });
 
                 state = detector.processGameLost(state, {
-                    body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -401, Timestamp: '2013-13-19T08:02:39.687Z' }
+                    sequenceNumber: 2,
+                    body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -401, Timestamp: '2013-12-19T09:02:39.687Z' }
                 });
             });
 
@@ -98,8 +103,7 @@ describe("when detecting irresponsible gamblers", function () {
                 expect(state).toEqual({
                     LastAlarm: null,
                     GamesLast24Hour: [
-                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100 },
-                        { Timestamp: '2013-13-19T08:02:39.687Z', Amount: -401 }
+                        { Timestamp: '2013-12-19T09:02:39.687Z', Amount: -401, SequenceNumber: 2 }
                     ]
                 });
             });
@@ -110,64 +114,32 @@ describe("when detecting irresponsible gamblers", function () {
             });
         });
 
-        //describe("given amount is negative", function() {
+        describe("given an event has already been processed", function () {
 
-        //    it("should emit a GameLost event to the player stream", function() {
+            var state;
 
-        //        distributor.process({}, {
-        //            body: {
-        //                GameId: 'Game-abc',
-        //                Timestamp: '',
-        //                PlayerResults: [
-        //                    { PlayerId: 'Player-p1', Amount: -100 }
-        //                ]
-        //            }
-        //        });
+            beforeEach(function () {
 
-        //        expect(projections.emit)
-        //            .wasCalledWith("Player-p1", "GameLost",
-        //                { PlayerId: 'Player-p1', GameId: 'Game-abc', Amount: -100 });
-        //    });
-        //});
+                var event = {
+                    sequenceNumber: 10,
+                    body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -100, Timestamp: '2013-12-18T08:02:39.687Z' }
+                };
+                
+                state = detector.init();
+                state = detector.processGameLost(state, event);
+                state = detector.processGameLost(state, event);
+                state = detector.processGameLost(state, event);
+            });
 
+            it("state should contain the only one event", function () {
 
-        //describe("given multiple players", function () {
-
-        //    beforeEach(function() {
-        //        distributor.process({}, {
-        //            body: {
-        //                GameId: 'Game-abc',
-        //                Timestamp: '',
-        //                PlayerResults: [
-        //                    { PlayerId: 'Player-p1', Amount: -100 },
-        //                    { PlayerId: 'Player-p2', Amount:   80 },
-        //                    { PlayerId: 'Player-p3', Amount:  -40 },
-        //                    { PlayerId: 'Player-p4', Amount:   20 }
-        //                ]
-        //            }
-        //        });
-        //    });
-
-        //    it("should emit a GameWon event to the winning players stream", function () {
-
-        //        expect(projections.emit)
-        //            .wasCalledWith("Player-p2", "GameWon",
-        //                { PlayerId: 'Player-p2', GameId: 'Game-abc', Amount: 80 });
-
-        //        expect(projections.emit)
-        //            .wasCalledWith("Player-p4", "GameWon",
-        //                { PlayerId: 'Player-p4', GameId: 'Game-abc', Amount: 20 });
-        //    });
-
-        //    it("should emit a GameLost event to the losing players stream", function () {
-
-        //        expect(projections.emit)
-        //            .wasCalledWith("Player-p1", "GameLost",
-        //                { PlayerId: 'Player-p1', GameId: 'Game-abc', Amount: -100 });
-
-        //        expect(projections.emit)
-        //            .wasCalledWith("Player-p3", "GameLost",
-        //                { PlayerId: 'Player-p3', GameId: 'Game-abc', Amount: -40 });
-        //    });
+                expect(state).toEqual({
+                    LastAlarm: null,
+                    GamesLast24Hour: [
+                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100, SequenceNumber: 10 }
+                    ]
+                });
+            });
+        });
     });
 });
