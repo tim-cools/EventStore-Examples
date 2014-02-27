@@ -54,6 +54,7 @@ namespace Soloco.EventStore.IrresponsibleGamblingNotifier
 
         private void Stop()
         {
+            _irresponsibleGamblerAlarmPublisher.Stop();
             _simulator.Stop();
         }
     }

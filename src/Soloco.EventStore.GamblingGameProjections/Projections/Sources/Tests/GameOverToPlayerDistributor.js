@@ -61,7 +61,6 @@ describe("when distributing GameOver event to to players", function () {
             });
         });
 
-
         describe("given multiple players", function () {
 
             beforeEach(function () {

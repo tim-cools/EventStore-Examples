@@ -21,7 +21,6 @@ describe("when detecting irresponsible gamblers", function () {
 
                 state = detector.init();
                 state = detector.processGameLost(state, {
-                    sequenceNumber: 10,
                     body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -100, Timestamp: '2013-12-18T08:02:39.687Z' }
                 });
             });
@@ -31,7 +30,7 @@ describe("when detecting irresponsible gamblers", function () {
                 expect(state).toEqual({
                     LastAlarm: null,
                     GamesLast24Hour: [
-                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100, SequenceNumber: 10 }
+                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100, GameId: 'Game-1' }
                     ]
                 });
             });
@@ -42,7 +41,7 @@ describe("when detecting irresponsible gamblers", function () {
             });
         });
 
-        describe("given amount lost is greather than 500 in last 24 hours", function () {
+        describe("given amount lost is greater than 500 in last 24 hours", function () {
 
             var state;
 
@@ -50,13 +49,11 @@ describe("when detecting irresponsible gamblers", function () {
 
                 state = detector.init();
                 state = detector.processGameLost(state, {
-                    sequenceNumber: 1,
                     body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -100, Timestamp: '2013-12-18T08:02:39.687Z' }
                 });
 
                 state = detector.processGameLost(state, {
-                    sequenceNumber: 2,
-                    body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -401, Timestamp: '2013-12-19T08:02:39.687Z' }
+                    body: { PlayerId: 'Player-1', GameId: 'Game-2', Amount: -401, Timestamp: '2013-12-19T08:02:39.687Z' }
                 });
             });
 
@@ -65,8 +62,8 @@ describe("when detecting irresponsible gamblers", function () {
                 expect(state).toEqual({
                     LastAlarm: '2013-12-19T08:02:39.687Z',
                     GamesLast24Hour: [
-                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100, SequenceNumber: 1 },
-                        { Timestamp: '2013-12-19T08:02:39.687Z', Amount: -401, SequenceNumber: 2 }
+                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100, GameId: 'Game-1' },
+                        { Timestamp: '2013-12-19T08:02:39.687Z', Amount: -401, GameId: 'Game-2' }
                     ]
                 });
             });
@@ -74,13 +71,13 @@ describe("when detecting irresponsible gamblers", function () {
             it("should emit an alarm", function () {
 
                 expect(projections.emit).wasCalledWith("IrresponsibleGamblingAlarms", "IrresponsibleGamblerDetected",
-                    { PlayerId: 'Player-1', AmountSpendLAst24Hours: -501, Timestamp: '2013-12-19T08:02:39.687Z' }
+                    { PlayerId: 'Player-1', AmountSpentLAst24Hours: -501, Timestamp: '2013-12-19T08:02:39.687Z' }
                 );
             });
         });
 
 
-        describe("given amount lost is greather than 500 but not in the last 24 hours", function () {
+        describe("given amount lost is greater than 500 but not in the last 24 hours", function () {
 
             var state;
 
@@ -88,13 +85,11 @@ describe("when detecting irresponsible gamblers", function () {
 
                 state = detector.init();
                 state = detector.processGameLost(state, {
-                    sequenceNumber: 1,
                     body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -100, Timestamp: '2013-12-18T08:02:39.687Z' }
                 });
 
                 state = detector.processGameLost(state, {
-                    sequenceNumber: 2,
-                    body: { PlayerId: 'Player-1', GameId: 'Game-1', Amount: -401, Timestamp: '2013-12-19T09:02:39.687Z' }
+                    body: { PlayerId: 'Player-1', GameId: 'Game-2', Amount: -401, Timestamp: '2013-12-19T09:02:39.687Z' }
                 });
             });
 
@@ -103,7 +98,7 @@ describe("when detecting irresponsible gamblers", function () {
                 expect(state).toEqual({
                     LastAlarm: null,
                     GamesLast24Hour: [
-                        { Timestamp: '2013-12-19T09:02:39.687Z', Amount: -401, SequenceNumber: 2 }
+                        { Timestamp: '2013-12-19T09:02:39.687Z', Amount: -401, GameId: 'Game-2' }
                     ]
                 });
             });
@@ -136,7 +131,7 @@ describe("when detecting irresponsible gamblers", function () {
                 expect(state).toEqual({
                     LastAlarm: null,
                     GamesLast24Hour: [
-                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100, SequenceNumber: 10 }
+                        { Timestamp: '2013-12-18T08:02:39.687Z', Amount: -100, GameId: 'Game-1' }
                     ]
                 });
             });

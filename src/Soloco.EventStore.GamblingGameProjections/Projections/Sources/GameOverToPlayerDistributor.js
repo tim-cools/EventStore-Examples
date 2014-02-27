@@ -29,18 +29,16 @@ var gameOverToPlayerDistributor = function gameOverToPlayerDistributorConstuctor
         }
     };
     
-    var process = function (previousState, measurementEvent) {
+    var process = function (state, event) {
 
-        var gameId = measurementEvent.body.GameId;
-        var players = measurementEvent.body.PlayerResults;
-        var timestamp = measurementEvent.body.Timestamp;
+        var gameId = event.body.GameId;
+        var players = event.body.PlayerResults;
+        var timestamp = event.body.Timestamp;
 
         for (var playerIndex = 0; playerIndex < players.length; playerIndex++) {
             var player = players[playerIndex];
             processPlayer(gameId, player, timestamp);
         }
-        
-        return previousState;
     };
 
     return {

@@ -1,10 +1,10 @@
 namespace Soloco.EventStore.GamblingGameProjections.Events.IrresponsibleGambler
 {
-    public class IrresponsibleGamblerNotifierState
+    public class IrresponsibleGamblerAlarmPublisherCheckpoint
     {
         public int LastEventProcessed { get; set; }
 
-        public IrresponsibleGamblerNotifierState(int eventNumber)
+        public IrresponsibleGamblerAlarmPublisherCheckpoint(int eventNumber)
         {
             LastEventProcessed = eventNumber;
         }

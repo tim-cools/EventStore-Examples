@@ -7,7 +7,7 @@ namespace Soloco.EventStore.GamblingGameProjections.Projections
 {
     public class IrresponsibleGamblerAlarmPublisher
     {
-        private const string StateStream = "$publisher-IrresponsibleGamblerAlarmPublisher-checkpoint";
+        private const string CheckpointStream = "$publisher-IrresponsibleGamblerAlarmPublisher-checkpoint";
         private const string AlarmStream = "IrresponsibleGamblingAlarms";
          
         private readonly IEventStoreConnection _eventStoreConnection;
@@ -45,7 +45,7 @@ namespace Soloco.EventStore.GamblingGameProjections.Projections
 
         private void Connect()
         {
-            var position = GetLastStatePosition(StateStream);
+            var position = GetLastCheckpoint(CheckpointStream);
 
             _eventStoreConnection.SubscribeToStreamFrom(AlarmStream, position, true, ProcessEvent,
                 userCredentials: EventStoreCredentials.Default, subscriptionDropped: TryToReconnect);
@@ -62,28 +62,40 @@ namespace Soloco.EventStore.GamblingGameProjections.Projections
         {
             var alarm = resolvedEvent.ParseJson<IrresponsibleGamblerDetected>();
 
-            Process(alarm);
+            Publish(alarm);
 
-            UpdateState(resolvedEvent);
+            StoreCheckpoint(resolvedEvent);
         }
 
-        private void Process(IrresponsibleGamblerDetected alarm)
+        private void Publish(IrresponsibleGamblerDetected alarm)
         {
             _bus.Publish(alarm);
         }
 
-        private void UpdateState(ResolvedEvent resolvedEvent)
+        private void StoreCheckpoint(ResolvedEvent resolvedEvent)
         {
-            var updatedState = new IrresponsibleGamblerNotifierState(resolvedEvent.Event.EventNumber)
+            var eventNumber = resolvedEvent.Event.EventNumber;
+            var checkpoint = new IrresponsibleGamblerAlarmPublisherCheckpoint(eventNumber)
                 .AsJsonEvent();
 
-            _eventStoreConnection.AppendToStream(StateStream, ExpectedVersion.Any, EventStoreCredentials.Default, updatedState);
+            SetCheckpointStreamMaxCount(eventNumber);
+
+            _eventStoreConnection.AppendToStream(CheckpointStream, ExpectedVersion.Any, EventStoreCredentials.Default, checkpoint);
         }
 
-        private int GetLastStatePosition(string stateStream)
+        private void SetCheckpointStreamMaxCount(int eventNumber)
         {
-            var state = _eventStoreConnection.GetLastEvent<IrresponsibleGamblerNotifierState>(stateStream);
-            return state != null ? state.LastEventProcessed : 0;
+            if (eventNumber != 0) return;
+
+            var metadata = StreamMetadata.Build().SetMaxCount(1);
+
+            _eventStoreConnection.SetStreamMetadata(CheckpointStream, ExpectedVersion.Any, metadata, EventStoreCredentials.Default);
+        }
+
+        private int? GetLastCheckpoint(string stateStream)
+        {
+            var state = _eventStoreConnection.GetLastEvent<IrresponsibleGamblerAlarmPublisherCheckpoint>(stateStream);
+            return state != null ? state.LastEventProcessed : (int?) null;
         }
     }
 }

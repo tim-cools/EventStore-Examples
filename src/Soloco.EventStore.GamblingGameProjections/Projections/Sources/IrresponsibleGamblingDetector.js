@@ -8,19 +8,15 @@ var irresponsibleGamblingDetector = function irresponsibleGamblingDetectorConstu
     var millisecondsPerDay = 24 * 60 * 60 * 1000;
     var amountLostThreshold = 500;
     
-    var createEvent = function (playerId, totalAmount, timestamp) {
-        return {
+    var emitAlarm = function (state, playerId, total, timestamp)  {
+
+        state.LastAlarm = timestamp;
+
+        eventServices.emit('IrresponsibleGamblingAlarms', 'IrresponsibleGamblerDetected', {
             PlayerId: playerId,
-            AmountSpendLAst24Hours: totalAmount,
+            AmountSpentLAst24Hours: total,
             Timestamp: timestamp
-        };
-    };
-
-    var emitAlarm = function (playerId, total, timestamp)  {
-
-        var event = createEvent(playerId, total, timestamp);
-
-        eventServices.emit('IrresponsibleGamblingAlarms', 'IrresponsibleGamblerDetected', event);
+        });
     };
 
     var init = function () {
@@ -46,15 +42,15 @@ var irresponsibleGamblingDetector = function irresponsibleGamblingDetectorConstu
         }
     };
     
-    var addNewGameToCache = function (gamesResults, timestamp, amount, sequenceNumber) {
+    var addNewGameToCache = function (gamesResults, timestamp, amount, gameId) {
 
-        gamesResults.push({ Timestamp: timestamp, Amount: amount, SequenceNumber: sequenceNumber });
+        gamesResults.push({ Timestamp: timestamp, Amount: amount, GameId: gameId });
     };
     
-    var updateChachedGamesLast24Hour = function (gamesResults, timestamp, amount, sequenceNumber) {
+    var updateCachedGamesLast24Hour = function (gamesResults, timestamp, amount, gameId) {
 
         removeGamesOlderThan24HoursFromCache(gamesResults, timestamp);
-        addNewGameToCache(gamesResults, timestamp, amount, sequenceNumber);
+        addNewGameToCache(gamesResults, timestamp, amount, gameId);
     };
 
     var calculateTotalAmount = function (gamesResults) {
@@ -67,37 +63,38 @@ var irresponsibleGamblingDetector = function irresponsibleGamblingDetectorConstu
         return total;
     };
 
-    var idempotent = function (gamesResults, sequenceNumber) {
+    var duplicated = function (gamesResults, gameId) {
         
         for (var resultIndex = 0; resultIndex < gamesResults.length; resultIndex++) {
 
             var result = gamesResults[resultIndex];
-            if (result.SequenceNumber == sequenceNumber) {
-                return false;
+            if (result.GameId == gameId) {
+                return true;
             }
         }
         
-        return true;
+        return false;
     };
 
-    var process = function (state, playerId, timestamp, amount, sequenceNumber) {
+    var process = function (state, playerId, timestamp, amount, gameId) {
         
         var gamesResults = state.GamesLast24Hour;
 
-        if (!idempotent(gamesResults, sequenceNumber)) {
+        if (duplicated(gamesResults, gameId)) {
             return state;
         }
 
-        updateChachedGamesLast24Hour(gamesResults, timestamp, amount, sequenceNumber);
+        updateCachedGamesLast24Hour(gamesResults, timestamp, amount, gameId);
 
-        var total = calculateTotalAmount(gamesResults);
-        
-        if (total < -amountLostThreshold && isMoreAs24HoursDifference(timestamp, state.LastAlarm)) {
-            
-            state.LastAlarm = timestamp;
-            emitAlarm(playerId, total, timestamp);
+        if (!isMoreAs24HoursDifference(timestamp, state.LastAlarm)) {
+            return state;
         }
-        
+
+        var total = calculateTotalAmount(gamesResults);        
+        if (total < -amountLostThreshold) {
+            emitAlarm(state, playerId, total, timestamp);
+        }
+                
         return state;
     };
 
@@ -106,8 +103,9 @@ var irresponsibleGamblingDetector = function irresponsibleGamblingDetectorConstu
         var playerId = event.body.PlayerId;
         var timestamp = event.body.Timestamp;
         var amount = event.body.Amount;
+        var gameId = event.body.GameId;
         
-        return process(state, playerId, timestamp, amount, event.sequenceNumber);
+        return process(state, playerId, timestamp, amount, gameId);
     };
 
     return {
