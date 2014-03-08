@@ -2820,6 +2820,21 @@
         </member>
         <member name="M:EventStore.ClientAPI.ProjectionsManager.DisableAsync(System.String,EventStore.ClientAPI.SystemData.UserCredentials)">
             <summary>
+            Asynchronously aborts and disables a projection without writing a checkpoint.
+            </summary>
+            <param name="name">The name of the projection.</param>
+            <param name="userCredentials">Credentials for a user with permission to disable a projection.</param>
+            <returns>A task representing the operation.</returns>
+        </member>
+        <member name="M:EventStore.ClientAPI.ProjectionsManager.Abort(System.String,EventStore.ClientAPI.SystemData.UserCredentials)">
+            <summary>
+            Synchronously avborts and disables a projection without writing a checkpoint.
+            </summary>
+            <param name="name">The name of the projection.</param>
+            <param name="userCredentials">Credentials for a user with permission to disable a projection.</param>
+        </member>
+        <member name="M:EventStore.ClientAPI.ProjectionsManager.AbortAsync(System.String,EventStore.ClientAPI.SystemData.UserCredentials)">
+            <summary>
             Asynchronously disables a projection.
             </summary>
             <param name="name">The name of the projection.</param>

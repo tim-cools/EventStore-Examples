@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.Core", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.GamblingGameProjections", "Soloco.EventStore.GamblingGameProjections\Soloco.EventStore.GamblingGameProjections.csproj", "{620BE33D-0416-48DE-991F-F61C2783A733}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.ECommerce", "Soloco.EventStore.ECommerce\Soloco.EventStore.ECommerce.csproj", "{3F9AB832-E8D7-409C-9895-1CCDDD21FC77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.EventStore.ECommerce.Server", "Soloco.EventStore.ECommerce.Server\Soloco.EventStore.ECommerce.Server.csproj", "{143F6B05-32DA-489F-848E-999EABAFB98D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{620BE33D-0416-48DE-991F-F61C2783A733}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{620BE33D-0416-48DE-991F-F61C2783A733}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{620BE33D-0416-48DE-991F-F61C2783A733}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F9AB832-E8D7-409C-9895-1CCDDD21FC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F9AB832-E8D7-409C-9895-1CCDDD21FC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F9AB832-E8D7-409C-9895-1CCDDD21FC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F9AB832-E8D7-409C-9895-1CCDDD21FC77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{143F6B05-32DA-489F-848E-999EABAFB98D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{143F6B05-32DA-489F-848E-999EABAFB98D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{143F6B05-32DA-489F-848E-999EABAFB98D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{143F6B05-32DA-489F-848E-999EABAFB98D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

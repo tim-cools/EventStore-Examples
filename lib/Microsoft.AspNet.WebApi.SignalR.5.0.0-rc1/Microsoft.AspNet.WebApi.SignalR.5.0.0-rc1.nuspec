@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AspNet.WebApi.SignalR</id>
+    <version>5.0.0-rc1</version>
+    <title>Microsoft ASP.NET Web API SignalR Integration</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://www.microsoft.com/web/webpi/eula/aspnetcomponent_ENU.htm</licenseUrl>
+    <projectUrl>http://www.asp.net/web-api</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>This package provides a convenient programming model for writing web APIs using ASP.NET Web API that send real-time updates to SignalR clients.</description>
+    <summary>This package provides a convenient programming model for writing web APIs using ASP.NET Web API that send real-time updates to SignalR clients.</summary>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <language>en-US</language>
+    <tags>Microsoft AspNet WebApi AspNetWebApi SignalR</tags>
+    <dependencies>
+      <dependency id="Microsoft.AspNet.SignalR.Core" version="1.0.0" />
+      <dependency id="Microsoft.AspNet.WebApi.Core" version="5.0.0-rc1" />
+    </dependencies>
+  </metadata>
+</package>

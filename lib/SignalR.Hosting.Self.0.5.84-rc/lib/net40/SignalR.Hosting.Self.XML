@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SignalR.Hosting.Self</name>
+    </assembly>
+    <members>
+        <member name="M:SignalR.TaskAsyncHelper.Interleave``1(System.Func{``0,System.Action,System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task},``0)">
+            <summary>
+            Passes a task returning function into another task returning function so that
+            it can decide when it starts and returns a task that completes when all are finished
+            </summary>
+        </member>
+        <member name="M:SignalR.Hosting.Self.Server.#ctor(System.String)">
+            <summary>
+            Initializes new instance of <see cref="T:SignalR.Hosting.Self.Server"/>.
+            </summary>
+            <param name="url">The url to host the server on.</param>
+        </member>
+        <member name="M:SignalR.Hosting.Self.Server.#ctor(System.String,SignalR.IDependencyResolver)">
+            <summary>
+            Initializes new instance of <see cref="T:SignalR.Hosting.Self.Server"/>.
+            </summary>
+            <param name="url">The url to host the server on.</param>
+            <param name="resolver">The dependency resolver for the server.</param>
+        </member>
+        <member name="M:SignalR.Hosting.Self.Server.Start">
+            <summary>
+            Starts the server connection.
+            </summary>
+        </member>
+        <member name="M:SignalR.Hosting.Self.Server.Stop">
+            <summary>
+            Stops the server.
+            </summary>
+        </member>
+    </members>
+</doc>

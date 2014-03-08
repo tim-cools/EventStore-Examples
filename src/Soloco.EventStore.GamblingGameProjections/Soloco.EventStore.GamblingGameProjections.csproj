@@ -34,6 +34,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\EventStore\EventStore.ClientAPI.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
@@ -60,7 +64,6 @@
     <Compile Include="GamblingGame.cs" />
     <Compile Include="Infrastructure\GameSimulator.cs" />
     <Compile Include="Infrastructure\KnownEvents.cs" />
-    <Compile Include="KernelModule.cs" />
     <Compile Include="Projections\IrresponsibleGamblerAlarmPublisher.cs" />
     <Compile Include="Projections\IrresponsibleGamblingDetectorProjection.cs" />
     <Compile Include="Projections\GameOverToPlayerDistributorProjection.cs" />
@@ -82,12 +85,10 @@
     <Content Include="Projections\Sources\Tests\GameOverToPlayerDistributor.js" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Projections\Sources\References\Jasmine\MIT.LICENSE" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="obj\" />
-    <Folder Include="Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Soloco.EventStore.Core\Soloco.EventStore.Core.csproj">
       <Project>{A714F3F2-899C-4CCE-81F2-3984EA7F034E}</Project>
