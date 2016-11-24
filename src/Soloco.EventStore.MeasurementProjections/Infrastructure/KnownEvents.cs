@@ -5,7 +5,7 @@ using Soloco.EventStore.MeasurementProjections.Events;
 
 namespace Soloco.EventStore.MeasurementProjections.Infrastructure
 {
-    internal class KnownEvents : IKnownEventsProvider
+    public class KnownEvents : IKnownEventsProvider
     {
         public KnownEvent Get(RecordedEvent recordedEvent)
         {
