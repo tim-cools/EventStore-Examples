@@ -1,5 +1,5 @@
-﻿ <reference path="References\1Prelude.js" />
- <reference path="References\Projections.js" />
+///<reference path="References\1Prelude.js" />
+///<reference path="References\Projections.js" />
 
 var mixin = function mixinConstructor() {
 
