@@ -35,7 +35,7 @@ The projections in these examples are managed by using the ClientAPI from C#. Ea
 Blog Posts Series
 =================
 
-These examples are explained in a series of Blog post: http://www.soloco.be/eventstore-projections-by-example-series/
+These examples are explained in a series of Blog post: https://www.soloco.be/eventstore-projections-by-example-series/
 
 Have Fun!
 =========
